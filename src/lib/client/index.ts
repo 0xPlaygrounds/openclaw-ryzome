@@ -1,0 +1,21 @@
+import createClient from "openapi-fetch";
+
+import type { components, paths } from "./schema";
+
+export function createApiClient(baseUrl: string) {
+  return createClient<paths>({
+    baseUrl,
+  });
+}
+
+export type { components };
+export type CanvasSchemas = components["schemas"];
+
+export type CreateCanvasRequest = CanvasSchemas["api.create_canvas.Request"];
+export type CreateCanvasResponse = CanvasSchemas["api.create_canvas.Response"];
+export type GetCanvasResponse = CanvasSchemas["CanvasEditorView"];
+export type PatchCanvasRequest = CanvasSchemas["api.patch_canvas.Request"];
+export type PatchOperation = Extract<
+  CanvasSchemas["Operation"],
+  { _type: "createNode" | "createEdge" }
+>;

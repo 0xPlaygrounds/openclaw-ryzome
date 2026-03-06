@@ -1,0 +1,38 @@
+{
+  "name": "@ryzome/openclaw-ryzome",
+  "version": "0.1.0",
+  "type": "module",
+  "openclaw": {
+    "extensions": [
+      "./src/index.ts"
+    ]
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome lint . && tsc --noEmit",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "lint:check": "biome lint --diagnostic-level=error ."
+  },
+  "peerDependencies": {
+    "@sinclair/typebox": "*"
+  },
+  "devDependencies": {
+    "@sinclair/typebox": "^0.34.0",
+    "@types/node": "^25.3.5",
+    "biome": "^0.3.3",
+    "typescript": "^5.7.0",
+    "vitest": "^4.0.18"
+  },
+  "dependencies": {
+    "bson": "^7.2.0",
+    "chalk": "^5.3.0",
+    "openapi-fetch": "^0.14.0",
+    "zod": "^4.3.6"
+  }
+}
