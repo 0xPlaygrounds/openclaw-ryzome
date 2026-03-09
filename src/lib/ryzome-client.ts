@@ -93,6 +93,7 @@ function makeApiKeyMiddleware(apiKey: string) {
       const headers = new Headers(request.headers);
       headers.set("x-api-key", apiKey);
       headers.set("Content-Type", "application/json");
+      headers.set("User-Agent", `RyzomeOpenclawPlugin/0.1.0`);
 
       return new Request(request, { headers });
     },
