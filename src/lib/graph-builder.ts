@@ -61,6 +61,7 @@ export function buildCanvasGraph(
   steps: StepInput[],
   canvasId: string,
 ): CanvasPatchOperations {
+  void canvasId;
   const depths = computeDepths(steps);
 
   const layoutNodes = steps.map((s) => ({
@@ -107,7 +108,6 @@ export function buildCanvasGraph(
   });
 
   const edgeOperations: PatchOperation[] = [];
-  let edgeIndex = 0;
 
   for (const step of steps) {
     for (const dep of step.dependsOn ?? []) {
@@ -124,7 +124,6 @@ export function buildCanvasGraph(
         toSide: "top" as const,
         label: "",
       });
-      edgeIndex++;
     }
   }
 
