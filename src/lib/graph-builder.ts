@@ -1,6 +1,6 @@
 import { computeLayout, estimateNodeHeight, NODE_WIDTH } from "./layout";
 import type { PatchOperation } from "./client";
-import { ObjectId } from "bson";
+import { createHash } from "node:crypto";
 
 export interface StepInput {
   id: string;
@@ -57,6 +57,10 @@ export interface CanvasPatchOperations {
   operations: PatchOperation[];
 }
 
+function deterministicObjectId(...parts: string[]): string {
+  return createHash("sha256").update(parts.join("\u001f")).digest("hex").slice(0, 24);
+}
+
 export function buildCanvasGraph(
   steps: StepInput[],
   canvasId: string,
@@ -72,7 +76,7 @@ export function buildCanvasGraph(
 
   const nodeIdMap = new Map<string, string>();
   for (const step of steps) {
-    nodeIdMap.set(step.id, new ObjectId().toString());
+    nodeIdMap.set(step.id, deterministicObjectId("node", canvasId, step.id));
   }
 
   const nodeOperations: PatchOperation[] = steps.map((step) => {
@@ -117,7 +121,7 @@ export function buildCanvasGraph(
 
       edgeOperations.push({
         _type: "createEdge" as const,
-        id: new ObjectId().toString(),
+        id: deterministicObjectId("edge", canvasId, dep, step.id, String(edgeIndex)),
         fromNodeId: fromId,
         fromSide: "bottom" as const,
         toNodeId: toId,

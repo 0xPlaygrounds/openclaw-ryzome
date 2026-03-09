@@ -106,10 +106,7 @@ function resolveApiKeyStatus(entry: RyzomePluginEntry | undefined): {
 
   return {};
 }
-dim(
-  "  Where does the config end and the context begin? You're about to weave",
-),
-dim("  the first thread between this terminal and your ryzome."),
+
 function printSetupHeader() {
   const lines = [
     "",
