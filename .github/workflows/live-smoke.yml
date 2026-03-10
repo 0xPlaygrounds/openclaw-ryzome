@@ -1,9 +1,6 @@
 name: Live Smoke
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 permissions:
@@ -17,7 +14,6 @@ jobs:
   live-smoke:
     name: Live production smoke test
     runs-on: ubuntu-latest
-    if: ${{ secrets.RYZOME_LIVE_SMOKE_API_KEY != '' }}
     env:
       RYZOME_ENABLE_LIVE_SMOKE: "1"
       RYZOME_LIVE_SMOKE_API_KEY: ${{ secrets.RYZOME_LIVE_SMOKE_API_KEY }}
@@ -43,6 +39,13 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Validate live smoke configuration
+        run: |
+          test -n "$RYZOME_LIVE_SMOKE_API_KEY" || {
+            echo "RYZOME_LIVE_SMOKE_API_KEY is required for live smoke runs."
+            exit 1
+          }
 
       - name: Run live smoke integration test
         run: pnpm run test:integration
