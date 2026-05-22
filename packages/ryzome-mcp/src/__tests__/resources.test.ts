@@ -169,7 +169,7 @@ describe("MCP resources", () => {
 		expect(parsed[0].id).toBe("aaa111");
 		expect(parsed[0].name).toBe("Research Canvas");
 		expect(parsed[0].url).toBe(
-			"https://ryzome.ai/workspace?canvas=aaa111",
+			"https://ryzome.ai/workspace?document=aaa111",
 		);
 		expect(parsed[1].id).toBe("bbb222");
 	});

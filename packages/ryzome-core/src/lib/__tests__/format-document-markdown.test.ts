@@ -54,6 +54,6 @@ describe("formatDocumentAsMarkdown", () => {
 		);
 
 		expect(markdown).toContain("# Canvas doc");
-		expect(markdown).toContain("> View: https://ryzome.ai/workspace?canvas=doc123");
+		expect(markdown).toContain("> View: https://ryzome.ai/workspace?document=doc123");
 	});
 });

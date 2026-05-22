@@ -327,7 +327,7 @@ describe("Hermes runner integration", () => {
 		expect(result.ok).toBe(true);
 		if (result.ok) {
 			expect(result.content[0]?.text).toContain(
-				`${activeStub.appUrl}/workspace?canvas=${CANVAS_ID}`,
+				`${activeStub.appUrl}/workspace?document=${CANVAS_ID}`,
 			);
 			expect(result.content[0]?.text).toContain("Nodes: 2 | Edges: 1");
 		}

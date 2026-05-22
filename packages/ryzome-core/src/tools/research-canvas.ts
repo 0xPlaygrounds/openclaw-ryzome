@@ -6,7 +6,8 @@ import type { RyzomeClientConfig } from "../lib/ryzome-client.js";
 export const researchCanvasToolName = "create_ryzome_research";
 export const researchCanvasToolDescription =
 	"Create a Ryzome canvas displaying research findings. " +
-	"Control layout by setting dependsOn on findings (reference 'topic' for the root node or other finding ids).";
+	"Control layout by setting dependsOn on findings (reference 'topic' for the root node or other finding ids). " +
+	"The result starts with a 'View: <url>' line — include that URL verbatim in your reply so the user can open the canvas.";
 
 const hexColorSchema = z
 	.string()
