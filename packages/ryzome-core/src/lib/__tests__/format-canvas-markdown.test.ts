@@ -79,7 +79,7 @@ describe("formatCanvasAsMarkdown", () => {
 			appUrl: "https://ryzome.ai",
 		});
 		expect(md).toContain(
-			"> View: https://ryzome.ai/workspace?canvas=canvas123",
+			"> View: https://ryzome.ai/workspace?document=canvas123",
 		);
 	});
 
@@ -88,7 +88,7 @@ describe("formatCanvasAsMarkdown", () => {
 			appUrl: "https://ryzome.ai/",
 		});
 		expect(md).toContain(
-			"> View: https://ryzome.ai/workspace?canvas=canvas123",
+			"> View: https://ryzome.ai/workspace?document=canvas123",
 		);
 	});
 

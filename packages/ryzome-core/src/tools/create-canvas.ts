@@ -5,7 +5,8 @@ import type { RyzomeClientConfig } from "../lib/ryzome-client.js";
 
 export const createCanvasToolName = "create_ryzome_canvas";
 export const createCanvasToolDescription =
-	"Create a Ryzome canvas with explicitly defined nodes and edges.";
+	"Create a Ryzome canvas with explicitly defined nodes and edges. " +
+	"The result starts with a 'View: <url>' line — include that URL verbatim in your reply so the user can open the canvas.";
 
 const hexColorSchema = z
 	.string()

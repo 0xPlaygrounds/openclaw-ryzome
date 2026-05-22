@@ -1,6 +1,6 @@
 export function buildCanvasAppUrl(appUrl: string, canvasId: string): string {
 	const appBase = appUrl.replace(/\/+$/, "");
-	return `${appBase}/workspace?canvas=${encodeURIComponent(canvasId)}`;
+	return `${appBase}/workspace?document=${encodeURIComponent(canvasId)}`;
 }
 
 export function buildDocumentAppUrl(appUrl: string, documentId: string): string {

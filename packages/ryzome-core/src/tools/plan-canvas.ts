@@ -6,7 +6,8 @@ import type { RyzomeClientConfig } from "../lib/ryzome-client.js";
 export const planCanvasToolName = "create_ryzome_plan";
 export const planCanvasToolDescription =
 	"Create a Ryzome canvas from a plan. " +
-	"Steps are auto-chained in order by default; optionally set id and dependsOn to express branching or merging.";
+	"Steps are auto-chained in order by default; optionally set id and dependsOn to express branching or merging. " +
+	"The result starts with a 'View: <url>' line — include that URL verbatim in your reply so the user can open the canvas.";
 
 const hexColorSchema = z
 	.string()

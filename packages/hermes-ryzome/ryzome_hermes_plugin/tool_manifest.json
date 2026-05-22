@@ -1,7 +1,7 @@
 [
   {
     "name": "create_ryzome_document",
-    "description": "Create a standalone Ryzome document that appears in the library.",
+    "description": "Create a standalone Ryzome document that appears in the library. The result starts with a 'View: <url>' line — include that URL verbatim in your reply so the user can open the document.",
     "parameters": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "type": "object",
@@ -268,7 +268,7 @@
   },
   {
     "name": "create_ryzome_canvas",
-    "description": "Create a Ryzome canvas with explicitly defined nodes and edges.",
+    "description": "Create a Ryzome canvas with explicitly defined nodes and edges. The result starts with a 'View: <url>' line — include that URL verbatim in your reply so the user can open the canvas.",
     "parameters": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "type": "object",
@@ -468,7 +468,7 @@
   },
   {
     "name": "create_ryzome_plan",
-    "description": "Create a Ryzome canvas from a plan. Steps are auto-chained in order by default; optionally set id and dependsOn to express branching or merging.",
+    "description": "Create a Ryzome canvas from a plan. Steps are auto-chained in order by default; optionally set id and dependsOn to express branching or merging. The result starts with a 'View: <url>' line — include that URL verbatim in your reply so the user can open the canvas.",
     "parameters": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "type": "object",
@@ -560,7 +560,7 @@
   },
   {
     "name": "create_ryzome_research",
-    "description": "Create a Ryzome canvas displaying research findings. Control layout by setting dependsOn on findings (reference 'topic' for the root node or other finding ids).",
+    "description": "Create a Ryzome canvas displaying research findings. Control layout by setting dependsOn on findings (reference 'topic' for the root node or other finding ids). The result starts with a 'View: <url>' line — include that URL verbatim in your reply so the user can open the canvas.",
     "parameters": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "type": "object",

@@ -46,7 +46,7 @@ describe("executeListCanvases", () => {
 			name: "Research Canvas",
 			description: "AI research notes",
 			pinned: true,
-			url: "https://ryzome.ai/workspace?canvas=aaa111",
+			url: "https://ryzome.ai/workspace?document=aaa111",
 		});
 		expect(parsed.canvases[1]).toMatchObject({
 			id: "bbb222",
@@ -90,7 +90,7 @@ describe("executeListCanvases", () => {
 		const parsed = JSON.parse(result.content[0].text);
 
 		expect(parsed.canvases[0].url).toBe(
-			"https://ryzome.ai/workspace?canvas=aaa111",
+			"https://ryzome.ai/workspace?document=aaa111",
 		);
 	});
 });

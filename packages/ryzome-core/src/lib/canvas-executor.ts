@@ -44,9 +44,9 @@ export async function executeCanvasWithSteps(
 			{
 				type: "text",
 				text: [
+					`View: ${canvasUrl}`,
 					`Canvas created: **${params.title}**`,
 					`Nodes: ${nodeCount} | Edges: ${edgeCount}`,
-					`View: ${canvasUrl}`,
 				].join("\n"),
 			},
 		],

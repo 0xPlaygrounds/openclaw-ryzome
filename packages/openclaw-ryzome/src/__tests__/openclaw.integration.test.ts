@@ -582,7 +582,7 @@ describe("OpenClaw integration", () => {
 				"Canvas created: **Stubbed OpenClaw integration**",
 			);
 			expect(resultText).toContain(
-				`View: ${stub.appUrl}/workspace?canvas=${stub.canvasId}`,
+				`View: ${stub.appUrl}/workspace?document=${stub.canvasId}`,
 			);
 
 			expect(stub.requests).toHaveLength(2);
@@ -644,7 +644,7 @@ describe("OpenClaw integration", () => {
 			);
 			const resultText = result?.content?.[0]?.text ?? "";
 			expect(resultText).toContain("Canvas created:");
-			expect(resultText).toContain(`${appBase}/workspace?canvas=`);
+			expect(resultText).toContain(`${appBase}/workspace?document=`);
 		},
 		180_000,
 	);

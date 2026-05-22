@@ -11,7 +11,8 @@ import {
 
 export const createDocumentToolName = "create_ryzome_document";
 export const createDocumentToolDescription =
-	"Create a standalone Ryzome document that appears in the library.";
+	"Create a standalone Ryzome document that appears in the library. " +
+	"The result starts with a 'View: <url>' line — include that URL verbatim in your reply so the user can open the document.";
 
 export const createDocumentParamsSchema = z.object({
 	title: z.string().optional().describe("Document title"),
@@ -45,10 +46,10 @@ export async function executeCreateDocument(
 			{
 				type: "text",
 				text: [
+					`View: ${documentUrl}`,
 					`Document created: **${document.title ?? "Untitled"}**`,
 					`Type: ${document.content._type}`,
 					`ID: ${document._id.$oid}`,
-					`View: ${documentUrl}`,
 				].join("\n"),
 			},
 		],
