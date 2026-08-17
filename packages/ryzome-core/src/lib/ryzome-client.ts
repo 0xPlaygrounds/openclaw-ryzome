@@ -10,6 +10,7 @@ import {
 	type ListCanvasesResponse,
 	type ListDocumentsResponse,
 	type PatchCanvasRequest,
+	type PatchBundleRequest,
 	type PatchDocumentRequest,
 	type UpdateDocumentMetadataRequest,
 	type UpdateDocumentMetadataResponse,
@@ -29,6 +30,7 @@ export type RyzomeRequestStage =
 	| "listCanvases"
 	| "listDocuments"
 	| "patchCanvas"
+	| "patchBundle"
 	| "patchDocument"
 	| "updateDocumentMetadata"
 	| "patchSharingConfig"
@@ -462,6 +464,40 @@ export class RyzomeClient {
 				path,
 				error,
 				canvasId,
+			});
+		}
+	}
+
+	async patchBundle(bundleId: string, req: PatchBundleRequest): Promise<void> {
+		const path = `/bundle/${bundleId}`;
+
+		try {
+			const { error, response } = await this.client.PATCH(
+				"/bundle/{bundle_id}",
+				{
+					params: { path: { bundle_id: bundleId } },
+					body: req,
+				},
+			);
+
+			if (!response.ok) {
+				throw this.buildHttpError({
+					stage: "patchBundle",
+					method: "PATCH",
+					path,
+					response,
+					error,
+					documentId: bundleId,
+				});
+			}
+		} catch (error) {
+			if (error instanceof RyzomeApiError) throw error;
+			throw this.buildNetworkError({
+				stage: "patchBundle",
+				method: "PATCH",
+				path,
+				error,
+				documentId: bundleId,
 			});
 		}
 	}

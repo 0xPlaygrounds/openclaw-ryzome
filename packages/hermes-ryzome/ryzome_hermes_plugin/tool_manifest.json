@@ -1,5 +1,110 @@
 [
   {
+    "name": "create_ryzome_bundle",
+    "description": "Create a Ryzome bundle: an ordered collection of document references. The result starts with a 'View: <url>' line — include that URL verbatim in your reply so the user can open the bundle.",
+    "parameters": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "title": {
+          "description": "Bundle title",
+          "type": "string"
+        },
+        "description": {
+          "description": "Bundle description",
+          "type": "string"
+        },
+        "tags": {
+          "description": "Bundle tags",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "document_ids": {
+          "description": "Document IDs to include, in display order",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "get_ryzome_bundle",
+    "description": "Retrieve a Ryzome bundle and its ordered documents.",
+    "parameters": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "bundle_id": {
+          "type": "string",
+          "description": "The ID of the bundle to retrieve"
+        }
+      },
+      "required": [
+        "bundle_id"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "list_ryzome_bundles",
+    "description": "List Ryzome bundles visible in the library.",
+    "parameters": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "in_library_only": {
+          "description": "Only return library-visible bundles (defaults to true)",
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "update_ryzome_bundle",
+    "description": "Add, remove, or reorder documents in a Ryzome bundle. document_ids replaces only the order and must include exactly the bundle's current document IDs.",
+    "parameters": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "bundle_id": {
+          "type": "string",
+          "description": "The ID of the bundle to update"
+        },
+        "add_document_ids": {
+          "description": "Document IDs to add",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "remove_document_ids": {
+          "description": "Document IDs to remove",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "document_ids": {
+          "description": "Full desired document order",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "bundle_id"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
     "name": "create_ryzome_document",
     "description": "Create a standalone Ryzome document that appears in the library. The result starts with a 'View: <url>' line — include that URL verbatim in your reply so the user can open the document.",
     "parameters": {
@@ -259,6 +364,35 @@
                 "_content"
               ],
               "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "_type": {
+                  "type": "string",
+                  "const": "Bundle"
+                },
+                "_content": {
+                  "type": "object",
+                  "properties": {
+                    "ids": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "ids"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "_type",
+                "_content"
+              ],
+              "additionalProperties": false
             }
           ]
         }
@@ -443,7 +577,8 @@
               "File",
               "Youtube",
               "Website",
-              "Canvas"
+              "Canvas",
+              "Bundle"
             ]
           }
         }
@@ -909,6 +1044,35 @@
                   "required": [
                     "nodes",
                     "edges"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "_type",
+                "_content"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "_type": {
+                  "type": "string",
+                  "const": "Bundle"
+                },
+                "_content": {
+                  "type": "object",
+                  "properties": {
+                    "ids": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "ids"
                   ],
                   "additionalProperties": false
                 }

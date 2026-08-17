@@ -25,6 +25,7 @@ export const documentContentTypeSchema = z.enum([
 	"Youtube",
 	"Website",
 	"Canvas",
+	"Bundle",
 ]);
 
 const textDocumentContentSchema = z.object({
@@ -75,12 +76,20 @@ const canvasDocumentContentSchema = z.object({
 	}),
 });
 
+const bundleDocumentContentSchema = z.object({
+	_type: z.literal("Bundle"),
+	_content: z.object({
+		ids: z.array(z.string()),
+	}),
+});
+
 export const documentContentInputSchema = z.discriminatedUnion("_type", [
 	textDocumentContentSchema,
 	fileDocumentContentSchema,
 	youtubeDocumentContentSchema,
 	websiteDocumentContentSchema,
 	canvasDocumentContentSchema,
+	bundleDocumentContentSchema,
 ]);
 
 export type DocumentContentInput = z.infer<typeof documentContentInputSchema>;

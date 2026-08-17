@@ -17,6 +17,7 @@ export type CreateCanvasResponse = CanvasSchemas["api.create_canvas.Response"];
 export type ListCanvasesResponse = CanvasSchemas["api.get_canvases.Response"];
 export type PatchCanvasRequest = CanvasSchemas["api.patch_canvas.Request"];
 export type PatchDocumentRequest = CanvasSchemas["api.patch_document.Request"];
+export type PatchBundleRequest = CanvasSchemas["api.patch_bundle.Request"];
 export type GetUploadUrlRequest = CanvasSchemas["api.get_upload_url.Request"];
 export type GetUploadUrlResponse = CanvasSchemas["api.get_upload_url.Response"];
 export type UpdateDocumentMetadataRequest =
@@ -35,6 +36,7 @@ export type DocumentView = CanvasSchemas["DocumentView"];
 export type DocumentMetadataView = CanvasSchemas["DocumentMetadataView"];
 export type DocumentContentView = CanvasSchemas["DocumentContentView"];
 export type DocumentOperation = CanvasSchemas["DocumentOperation"];
+export type BundleOperation = CanvasSchemas["BundleOperation"];
 export type ListDocumentsResponse = { data: DocumentView[] };
 
 // Canvas view types (used by downstream consumers)

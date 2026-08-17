@@ -21,7 +21,9 @@ describe("createRyzomeMcpServer", () => {
 		expect(expectedNames).toContain("update_ryzome_document");
 		expect(expectedNames).toContain("save_ryzome_node_to_library");
 		expect(expectedNames).toContain("upload_ryzome_image");
-		expect(expectedNames).toHaveLength(11);
+		expect(expectedNames).toContain("create_ryzome_bundle");
+		expect(expectedNames).toContain("update_ryzome_bundle");
+		expect(expectedNames).toHaveLength(15);
 	});
 });
 

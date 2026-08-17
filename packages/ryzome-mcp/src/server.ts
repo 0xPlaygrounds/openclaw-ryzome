@@ -179,6 +179,37 @@ export function createRyzomeMcpServer(): McpServer {
 	);
 
 	server.resource(
+		"bundle-list",
+		"ryzome://bundles",
+		{
+			description: "List all library-visible Ryzome bundles with their IDs, titles, and URLs",
+			mimeType: "application/json",
+		},
+		async (uri) => {
+			if (!clientConfig) {
+				return {
+					contents: [{ uri: uri.href, mimeType: "text/plain" as const, text: "Ryzome API key not configured." }],
+				};
+			}
+			const result = await new RyzomeClient(clientConfig).listDocuments({
+				inLibraryOnly: true,
+				contentTypes: ["Bundle"],
+			});
+			const summaries = result.data.map((bundle) => ({
+				id: bundle._id.$oid,
+				title: bundle.title ?? "Untitled",
+				description: bundle.description ?? null,
+				tags: bundle.tags ?? [],
+				updatedAt: bundle.updatedAt,
+				url: buildDocumentViewAppUrl(clientConfig.appUrl, bundle),
+			}));
+			return {
+				contents: [{ uri: uri.href, mimeType: "application/json" as const, text: JSON.stringify(summaries, null, 2) }],
+			};
+		},
+	);
+
+	server.resource(
 		"canvas",
 		new ResourceTemplate("ryzome://canvas/{id}", {
 			list: async () => {
@@ -290,6 +321,53 @@ export function createRyzomeMcpServer(): McpServer {
 						text: markdown,
 					},
 				],
+			};
+		},
+	);
+
+	server.resource(
+		"bundle",
+		new ResourceTemplate("ryzome://bundle/{id}", {
+			list: async () => {
+				if (!clientConfig) return { resources: [] };
+				try {
+					const result = await new RyzomeClient(clientConfig).listDocuments({
+						inLibraryOnly: true,
+						contentTypes: ["Bundle"],
+					});
+					return {
+						resources: result.data.map((bundle) => ({
+							uri: `ryzome://bundle/${bundle._id.$oid}`,
+							name: bundle.title ?? "Untitled",
+							description: bundle.description ?? undefined,
+							mimeType: "text/markdown" as const,
+						})),
+					};
+				} catch {
+					return { resources: [] };
+				}
+			},
+		}),
+		{
+			description: "Retrieve a Ryzome bundle as markdown, including its ordered documents",
+			mimeType: "text/markdown",
+		},
+		async (uri, { id }) => {
+			if (!clientConfig) {
+				return {
+					contents: [{ uri: uri.href, mimeType: "text/plain" as const, text: "Ryzome API key not configured." }],
+				};
+			}
+			const bundle = await new RyzomeClient(clientConfig).getDocument(resourceIdToString(id));
+			if (bundle.content._type !== "Bundle") {
+				throw new Error(`Document ${resourceIdToString(id)} is a ${bundle.content._type}, not a Bundle.`);
+			}
+			return {
+				contents: [{
+					uri: uri.href,
+					mimeType: "text/markdown" as const,
+					text: formatDocumentAsMarkdown(bundle, { appUrl: clientConfig.appUrl }),
+				}],
 			};
 		},
 	);

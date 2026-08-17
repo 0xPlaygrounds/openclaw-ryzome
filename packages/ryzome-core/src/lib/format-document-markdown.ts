@@ -92,6 +92,20 @@ export function formatDocumentAsMarkdown(
 		case "File":
 			lines.push("", ...formatFileDetails(document));
 			break;
+		case "Bundle": {
+			const documents = document.content._content.documentsMetadata;
+			lines.push("", "## Documents");
+			if (documents.length === 0) {
+				lines.push("", "This bundle is empty.");
+			} else {
+				for (const item of documents) {
+					lines.push(
+						`- ${item.title ?? "Untitled"} (${item.content._type}, ID: ${item._id.$oid})`,
+					);
+				}
+			}
+			break;
+		}
 	}
 
 	return lines.join("\n");
