@@ -113,7 +113,9 @@ export const documentOperationInputSchema = z.discriminatedUnion("_type", [
 	}),
 ]);
 
-export type DocumentOperationInput = z.infer<typeof documentOperationInputSchema>;
+export type DocumentOperationInput = z.infer<
+	typeof documentOperationInputSchema
+>;
 
 export function toDocumentContentView(
 	content: DocumentContentInput,
@@ -134,6 +136,8 @@ export function toDocumentOperation(
 	return operation as DocumentOperation;
 }
 
-export function getDocumentUrlType(document: Pick<DocumentView, "content">): string {
+export function getDocumentUrlType(
+	document: Pick<DocumentView, "content">,
+): string {
 	return document.content._type;
 }

@@ -78,10 +78,17 @@ const mockDocuments = [
 
 const mockBundles = [
 	{
-		_id: { $oid: "bundle123" }, title: "Research bundle", description: "Sources",
-		content: { _type: "Bundle" as const, _content: { documentsMetadata: [] }, },
-		generated: false, inLibrary: true, isFavorite: false, ownerId: "owner1", tags: [],
-		createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z",
+		_id: { $oid: "bundle123" },
+		title: "Research bundle",
+		description: "Sources",
+		content: { _type: "Bundle" as const, _content: { documentsMetadata: [] } },
+		generated: false,
+		inLibrary: true,
+		isFavorite: false,
+		ownerId: "owner1",
+		tags: [],
+		createdAt: "2026-01-01T00:00:00Z",
+		updatedAt: "2026-01-01T00:00:00Z",
 	},
 ];
 
@@ -177,9 +184,7 @@ describe("MCP resources", () => {
 		expect(parsed).toHaveLength(2);
 		expect(parsed[0].id).toBe("aaa111");
 		expect(parsed[0].name).toBe("Research Canvas");
-		expect(parsed[0].url).toBe(
-			"https://ryzome.ai/workspace?document=aaa111",
-		);
+		expect(parsed[0].url).toBe("https://ryzome.ai/workspace?document=aaa111");
 		expect(parsed[1].id).toBe("bbb222");
 	});
 
@@ -203,19 +208,29 @@ describe("MCP resources", () => {
 		expect(parsed).toHaveLength(1);
 		expect(parsed[0].id).toBe("doc123");
 		expect(parsed[0].contentType).toBe("Text");
-		expect(parsed[0].url).toBe(
-			"https://ryzome.ai/workspace?document=doc123",
-		);
+		expect(parsed[0].url).toBe("https://ryzome.ai/workspace?document=doc123");
 	});
 
 	it("reads bundle resources and filters them to bundles", async () => {
-		vi.spyOn(RyzomeClient.prototype, "listDocuments").mockResolvedValue({ data: mockBundles } as never);
-		vi.spyOn(RyzomeClient.prototype, "getDocument").mockResolvedValue(mockBundles[0] as never);
-		const { client } = await createConnectedClient({ RYZOME_API_KEY: "test-key" });
+		vi.spyOn(RyzomeClient.prototype, "listDocuments").mockResolvedValue({
+			data: mockBundles,
+		} as never);
+		vi.spyOn(RyzomeClient.prototype, "getDocument").mockResolvedValue(
+			mockBundles[0] as never,
+		);
+		const { client } = await createConnectedClient({
+			RYZOME_API_KEY: "test-key",
+		});
 		const listed = await client.readResource({ uri: "ryzome://bundles" });
-		expect((listed.contents[0] as { text: string }).text).toContain("bundle123");
-		const detail = await client.readResource({ uri: "ryzome://bundle/bundle123" });
-		expect((detail.contents[0] as { text: string }).text).toContain("Research bundle");
+		expect((listed.contents[0] as { text: string }).text).toContain(
+			"bundle123",
+		);
+		const detail = await client.readResource({
+			uri: "ryzome://bundle/bundle123",
+		});
+		expect((detail.contents[0] as { text: string }).text).toContain(
+			"Research bundle",
+		);
 	});
 
 	it("reads ryzome://canvas/{id} and returns markdown", async () => {

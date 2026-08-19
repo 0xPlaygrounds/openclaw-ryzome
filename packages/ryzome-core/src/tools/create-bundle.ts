@@ -34,7 +34,9 @@ export async function executeCreateBundle(
 	});
 
 	if (bundle.content._type !== "Bundle") {
-		throw new Error(`Bundle creation returned a ${bundle.content._type} document.`);
+		throw new Error(
+			`Bundle creation returned a ${bundle.content._type} document.`,
+		);
 	}
 
 	return {

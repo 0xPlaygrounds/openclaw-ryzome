@@ -52,10 +52,7 @@ export function formatDocumentAsMarkdown(
 	lines.push("", `> Type: ${document.content._type}`);
 
 	if (opts?.appUrl) {
-		lines.push(
-			"",
-			`> View: ${buildDocumentViewAppUrl(opts.appUrl, document)}`,
-		);
+		lines.push("", `> View: ${buildDocumentViewAppUrl(opts.appUrl, document)}`);
 	}
 
 	if (document.tags?.length) {

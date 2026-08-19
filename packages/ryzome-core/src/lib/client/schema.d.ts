@@ -244,8 +244,12 @@ export interface components {
 		};
 		BundleOperation:
 			| (components["schemas"]["AddDocumentParams"] & { _type: "addDocument" })
-			| (components["schemas"]["RemoveDocumentParams"] & { _type: "removeDocument" })
-			| (components["schemas"]["ReorderDocumentsParams"] & { _type: "reorderDocuments" });
+			| (components["schemas"]["RemoveDocumentParams"] & {
+					_type: "removeDocument";
+			  })
+			| (components["schemas"]["ReorderDocumentsParams"] & {
+					_type: "reorderDocuments";
+			  });
 		DocumentView: {
 			_id: components["schemas"]["ObjectId"];
 			archived?: boolean;

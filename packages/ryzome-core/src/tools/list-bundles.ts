@@ -3,13 +3,20 @@ import { buildDocumentViewAppUrl } from "../lib/app-url.js";
 import { RyzomeClient, type RyzomeClientConfig } from "../lib/ryzome-client.js";
 
 export const listBundlesToolName = "list_ryzome_bundles";
-export const listBundlesToolDescription = "List Ryzome bundles visible in the library.";
+export const listBundlesToolDescription =
+	"List Ryzome bundles visible in the library.";
 
 export const listBundlesParamsSchema = z.object({
-	in_library_only: z.boolean().optional().describe("Only return library-visible bundles (defaults to true)"),
+	in_library_only: z
+		.boolean()
+		.optional()
+		.describe("Only return library-visible bundles (defaults to true)"),
 });
 
-export async function executeListBundles(rawParams: unknown, clientConfig: RyzomeClientConfig) {
+export async function executeListBundles(
+	rawParams: unknown,
+	clientConfig: RyzomeClientConfig,
+) {
 	const params = listBundlesParamsSchema.parse(rawParams);
 	const result = await new RyzomeClient(clientConfig).listDocuments({
 		inLibraryOnly: params.in_library_only ?? true,
@@ -23,5 +30,12 @@ export async function executeListBundles(rawParams: unknown, clientConfig: Ryzom
 		updatedAt: bundle.updatedAt,
 		url: buildDocumentViewAppUrl(clientConfig.appUrl, bundle),
 	}));
-	return { content: [{ type: "text" as const, text: JSON.stringify({ count: bundles.length, bundles }, null, 2) }] };
+	return {
+		content: [
+			{
+				type: "text" as const,
+				text: JSON.stringify({ count: bundles.length, bundles }, null, 2),
+			},
+		],
+	};
 }

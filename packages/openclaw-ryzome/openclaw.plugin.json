@@ -4,9 +4,7 @@
 	"description": "Create Ryzome canvases from plans and research",
 	"version": "0.5.1",
 	"activation": {
-		"onCommands": [
-			"ryzome"
-		]
+		"onCommands": ["ryzome"]
 	},
 	"contracts": {
 		"tools": [

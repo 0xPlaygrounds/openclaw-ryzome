@@ -182,13 +182,20 @@ export function createRyzomeMcpServer(): McpServer {
 		"bundle-list",
 		"ryzome://bundles",
 		{
-			description: "List all library-visible Ryzome bundles with their IDs, titles, and URLs",
+			description:
+				"List all library-visible Ryzome bundles with their IDs, titles, and URLs",
 			mimeType: "application/json",
 		},
 		async (uri) => {
 			if (!clientConfig) {
 				return {
-					contents: [{ uri: uri.href, mimeType: "text/plain" as const, text: "Ryzome API key not configured." }],
+					contents: [
+						{
+							uri: uri.href,
+							mimeType: "text/plain" as const,
+							text: "Ryzome API key not configured.",
+						},
+					],
 				};
 			}
 			const result = await new RyzomeClient(clientConfig).listDocuments({
@@ -204,7 +211,13 @@ export function createRyzomeMcpServer(): McpServer {
 				url: buildDocumentViewAppUrl(clientConfig.appUrl, bundle),
 			}));
 			return {
-				contents: [{ uri: uri.href, mimeType: "application/json" as const, text: JSON.stringify(summaries, null, 2) }],
+				contents: [
+					{
+						uri: uri.href,
+						mimeType: "application/json" as const,
+						text: JSON.stringify(summaries, null, 2),
+					},
+				],
 			};
 		},
 	);
@@ -349,25 +362,40 @@ export function createRyzomeMcpServer(): McpServer {
 			},
 		}),
 		{
-			description: "Retrieve a Ryzome bundle as markdown, including its ordered documents",
+			description:
+				"Retrieve a Ryzome bundle as markdown, including its ordered documents",
 			mimeType: "text/markdown",
 		},
 		async (uri, { id }) => {
 			if (!clientConfig) {
 				return {
-					contents: [{ uri: uri.href, mimeType: "text/plain" as const, text: "Ryzome API key not configured." }],
+					contents: [
+						{
+							uri: uri.href,
+							mimeType: "text/plain" as const,
+							text: "Ryzome API key not configured.",
+						},
+					],
 				};
 			}
-			const bundle = await new RyzomeClient(clientConfig).getDocument(resourceIdToString(id));
+			const bundle = await new RyzomeClient(clientConfig).getDocument(
+				resourceIdToString(id),
+			);
 			if (bundle.content._type !== "Bundle") {
-				throw new Error(`Document ${resourceIdToString(id)} is a ${bundle.content._type}, not a Bundle.`);
+				throw new Error(
+					`Document ${resourceIdToString(id)} is a ${bundle.content._type}, not a Bundle.`,
+				);
 			}
 			return {
-				contents: [{
-					uri: uri.href,
-					mimeType: "text/markdown" as const,
-					text: formatDocumentAsMarkdown(bundle, { appUrl: clientConfig.appUrl }),
-				}],
+				contents: [
+					{
+						uri: uri.href,
+						mimeType: "text/markdown" as const,
+						text: formatDocumentAsMarkdown(bundle, {
+							appUrl: clientConfig.appUrl,
+						}),
+					},
+				],
 			};
 		},
 	);

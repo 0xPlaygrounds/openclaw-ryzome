@@ -67,7 +67,7 @@
   },
   {
     "name": "update_ryzome_bundle",
-    "description": "Add, remove, or reorder documents in a Ryzome bundle. document_ids replaces only the order and must include exactly the bundle's current document IDs.",
+    "description": "Add, remove, or reorder documents in a Ryzome bundle. When combining operations, adds and removals are applied first; document_ids then reorders and must contain the complete resulting set of document IDs (current IDs minus removals plus additions).",
     "parameters": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "type": "object",
@@ -91,7 +91,7 @@
           }
         },
         "document_ids": {
-          "description": "Full desired document order",
+          "description": "Full desired document order. When combined with add/remove, this must be the complete resulting set of document IDs after those operations are applied.",
           "type": "array",
           "items": {
             "type": "string"

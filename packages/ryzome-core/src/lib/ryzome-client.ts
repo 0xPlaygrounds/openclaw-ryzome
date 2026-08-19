@@ -267,7 +267,9 @@ export class RyzomeClient {
 		}
 	}
 
-	async createDocument(req: CreateDocumentRequestDocument): Promise<DocumentView> {
+	async createDocument(
+		req: CreateDocumentRequestDocument,
+	): Promise<DocumentView> {
 		try {
 			const { data, error, response } = await this.client.POST("/document", {
 				body: {
