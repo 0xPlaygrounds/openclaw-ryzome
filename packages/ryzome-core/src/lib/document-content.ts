@@ -25,6 +25,7 @@ export const documentContentTypeSchema = z.enum([
 	"Youtube",
 	"Website",
 	"Canvas",
+	"Bundle",
 ]);
 
 const textDocumentContentSchema = z.object({
@@ -75,12 +76,20 @@ const canvasDocumentContentSchema = z.object({
 	}),
 });
 
+const bundleDocumentContentSchema = z.object({
+	_type: z.literal("Bundle"),
+	_content: z.object({
+		ids: z.array(z.string()),
+	}),
+});
+
 export const documentContentInputSchema = z.discriminatedUnion("_type", [
 	textDocumentContentSchema,
 	fileDocumentContentSchema,
 	youtubeDocumentContentSchema,
 	websiteDocumentContentSchema,
 	canvasDocumentContentSchema,
+	bundleDocumentContentSchema,
 ]);
 
 export type DocumentContentInput = z.infer<typeof documentContentInputSchema>;
@@ -104,7 +113,9 @@ export const documentOperationInputSchema = z.discriminatedUnion("_type", [
 	}),
 ]);
 
-export type DocumentOperationInput = z.infer<typeof documentOperationInputSchema>;
+export type DocumentOperationInput = z.infer<
+	typeof documentOperationInputSchema
+>;
 
 export function toDocumentContentView(
 	content: DocumentContentInput,
@@ -125,6 +136,8 @@ export function toDocumentOperation(
 	return operation as DocumentOperation;
 }
 
-export function getDocumentUrlType(document: Pick<DocumentView, "content">): string {
+export function getDocumentUrlType(
+	document: Pick<DocumentView, "content">,
+): string {
 	return document.content._type;
 }

@@ -21,6 +21,31 @@ export {
 } from "./create-document.js";
 
 export {
+	createBundleToolName,
+	createBundleToolDescription,
+	createBundleParamsSchema,
+	executeCreateBundle,
+} from "./create-bundle.js";
+export {
+	getBundleToolName,
+	getBundleToolDescription,
+	getBundleParamsSchema,
+	executeGetBundle,
+} from "./get-bundle.js";
+export {
+	listBundlesToolName,
+	listBundlesToolDescription,
+	listBundlesParamsSchema,
+	executeListBundles,
+} from "./list-bundles.js";
+export {
+	updateBundleToolName,
+	updateBundleToolDescription,
+	updateBundleParamsSchema,
+	executeUpdateBundle,
+} from "./update-bundle.js";
+
+export {
 	createCanvasToolName,
 	createCanvasToolDescription,
 	createCanvasParamsSchema,
@@ -97,6 +122,30 @@ import {
 	executeCreateDocument,
 } from "./create-document.js";
 import {
+	createBundleToolName,
+	createBundleToolDescription,
+	createBundleParamsSchema,
+	executeCreateBundle,
+} from "./create-bundle.js";
+import {
+	getBundleToolName,
+	getBundleToolDescription,
+	getBundleParamsSchema,
+	executeGetBundle,
+} from "./get-bundle.js";
+import {
+	listBundlesToolName,
+	listBundlesToolDescription,
+	listBundlesParamsSchema,
+	executeListBundles,
+} from "./list-bundles.js";
+import {
+	updateBundleToolName,
+	updateBundleToolDescription,
+	updateBundleParamsSchema,
+	executeUpdateBundle,
+} from "./update-bundle.js";
+import {
 	createCanvasToolName,
 	createCanvasToolDescription,
 	createCanvasParamsSchema,
@@ -158,6 +207,30 @@ import {
 } from "./upload-image.js";
 
 export const toolRegistry: ToolEntry[] = [
+	{
+		name: createBundleToolName,
+		description: createBundleToolDescription,
+		paramsSchema: createBundleParamsSchema,
+		execute: executeCreateBundle,
+	},
+	{
+		name: getBundleToolName,
+		description: getBundleToolDescription,
+		paramsSchema: getBundleParamsSchema,
+		execute: executeGetBundle,
+	},
+	{
+		name: listBundlesToolName,
+		description: listBundlesToolDescription,
+		paramsSchema: listBundlesParamsSchema,
+		execute: executeListBundles,
+	},
+	{
+		name: updateBundleToolName,
+		description: updateBundleToolDescription,
+		paramsSchema: updateBundleParamsSchema,
+		execute: executeUpdateBundle,
+	},
 	{
 		name: createDocumentToolName,
 		description: createDocumentToolDescription,

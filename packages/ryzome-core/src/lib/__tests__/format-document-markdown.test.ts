@@ -31,7 +31,9 @@ describe("formatDocumentAsMarkdown", () => {
 
 		expect(markdown).toContain("# Spec");
 		expect(markdown).toContain("> Type: Text");
-		expect(markdown).toContain("> View: https://ryzome.ai/workspace?document=doc123");
+		expect(markdown).toContain(
+			"> View: https://ryzome.ai/workspace?document=doc123",
+		);
 		expect(markdown).toContain("Hello world");
 		expect(markdown).toContain("> Tags: draft");
 	});
@@ -54,6 +56,31 @@ describe("formatDocumentAsMarkdown", () => {
 		);
 
 		expect(markdown).toContain("# Canvas doc");
-		expect(markdown).toContain("> View: https://ryzome.ai/workspace?document=doc123");
+		expect(markdown).toContain(
+			"> View: https://ryzome.ai/workspace?document=doc123",
+		);
+	});
+
+	it("formats bundles with their ordered documents", () => {
+		const markdown = formatDocumentAsMarkdown({
+			...makeTextDocument(),
+			title: "Research bundle",
+			content: {
+				_type: "Bundle",
+				_content: {
+					documentsMetadata: [
+						{
+							_id: { $oid: "doc2" },
+							title: "Source",
+							content: { _type: "Website" },
+							createdAt: "2026-01-01T00:00:00Z",
+							updatedAt: "2026-01-01T00:00:00Z",
+						},
+					],
+				},
+			},
+		} as never);
+		expect(markdown).toContain("## Documents");
+		expect(markdown).toContain("- Source (Website, ID: doc2)");
 	});
 });

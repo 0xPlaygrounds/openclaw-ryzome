@@ -92,6 +92,22 @@ export interface paths {
 		patch: operations["patch_canvas"];
 		trace?: never;
 	};
+	"/bundle/{bundle_id}": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch: operations["patch_bundle"];
+		trace?: never;
+	};
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -207,7 +223,33 @@ export interface components {
 					_content: components["schemas"]["CanvasView"];
 					/** @enum {string} */
 					_type: "Canvas";
+			  }
+			| {
+					_content: components["schemas"]["BundleView"];
+					/** @enum {string} */
+					_type: "Bundle";
 			  };
+		BundleView: {
+			documentsMetadata: components["schemas"]["DocumentMetadataView"][];
+		};
+		AddDocumentParams: {
+			id: string;
+			position?: number | null;
+		};
+		RemoveDocumentParams: {
+			id: string;
+		};
+		ReorderDocumentsParams: {
+			ids: string[];
+		};
+		BundleOperation:
+			| (components["schemas"]["AddDocumentParams"] & { _type: "addDocument" })
+			| (components["schemas"]["RemoveDocumentParams"] & {
+					_type: "removeDocument";
+			  })
+			| (components["schemas"]["ReorderDocumentsParams"] & {
+					_type: "reorderDocuments";
+			  });
 		DocumentView: {
 			_id: components["schemas"]["ObjectId"];
 			archived?: boolean;
@@ -228,6 +270,9 @@ export interface components {
 		DocumentMetadataView: {
 			_id: components["schemas"]["ObjectId"];
 			archived?: boolean;
+			content: {
+				_type: "Text" | "File" | "Youtube" | "Website" | "Canvas" | "Bundle";
+			};
 			createdAt: string;
 			description?: string | null;
 			inLibrary?: boolean;
@@ -497,6 +542,9 @@ export interface components {
 		};
 		"api.patch_canvas.Request": {
 			operations: components["schemas"]["Operation"][];
+		};
+		"api.patch_bundle.Request": {
+			operations: components["schemas"]["BundleOperation"][];
 		};
 		"api.create_documents.Request": {
 			documents: components["schemas"]["api.create_documents.RequestDocument"][];

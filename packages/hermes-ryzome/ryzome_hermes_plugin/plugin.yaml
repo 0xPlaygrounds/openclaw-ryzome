@@ -8,6 +8,10 @@ requires_env:
     url: "https://ryzome.ai/workspace#settings/api-keys"
     secret: true
 provides_tools:
+  - create_ryzome_bundle
+  - get_ryzome_bundle
+  - list_ryzome_bundles
+  - update_ryzome_bundle
   - create_ryzome_document
   - create_ryzome_canvas
   - get_ryzome_document

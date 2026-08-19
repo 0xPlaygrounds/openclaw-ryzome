@@ -15,19 +15,23 @@ The first command registers this repo as a plugin marketplace; the second instal
 
 ## What's Included
 
-### MCP Tools (11)
+### MCP Tools (15)
 
 | Tool | Description |
 |------|-------------|
 | `create_ryzome_document` | Create a standalone document in the Ryzome library |
+| `create_ryzome_bundle` | Create an ordered collection of document references |
 | `create_ryzome_canvas` | Create a canvas with explicitly defined nodes and edges |
 | `get_ryzome_document` | Retrieve a document by ID with metadata and content details |
+| `get_ryzome_bundle` | Retrieve a bundle and its ordered documents |
 | `create_ryzome_plan` | Create a canvas from sequential steps (auto-chained) |
 | `create_ryzome_research` | Create a canvas with research findings branching from a topic |
 | `get_ryzome_canvas` | Retrieve a canvas by ID with all nodes and edges |
 | `list_ryzome_documents` | List accessible documents, optionally filtered by tag, favorite state, or content type |
+| `list_ryzome_bundles` | List library-visible bundles |
 | `list_ryzome_canvases` | List all accessible canvases |
 | `update_ryzome_document` | Update document metadata or content, including appending text |
+| `update_ryzome_bundle` | Add, remove, or reorder documents in a bundle |
 | `save_ryzome_node_to_library` | Promote a canvas node's backing document into the library |
 | `upload_ryzome_image` | Upload an image from a URL to an existing canvas |
 
@@ -39,6 +43,8 @@ The first command registers this repo as a plugin marketplace; the second instal
 | `ryzome://canvas/{id}` | Single canvas rendered as structured markdown |
 | `ryzome://documents` | JSON list of library-visible document summaries |
 | `ryzome://document/{id}` | Single document rendered as structured markdown |
+| `ryzome://bundles` | JSON list of library-visible bundle summaries |
+| `ryzome://bundle/{id}` | Single bundle rendered as structured markdown |
 
 ### Skills
 
