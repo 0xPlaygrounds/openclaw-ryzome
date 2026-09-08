@@ -34,7 +34,11 @@ const GROUP_HEADER_PADDING = 60;
 function buildAlgorithmLayoutOptions(params: {
 	algorithm: LayoutAlgorithm;
 	direction: LayoutDirection;
-	spacing: { nodeNode: number; nodeNodeBetweenLayers: number; edgeNode: number };
+	spacing: {
+		nodeNode: number;
+		nodeNodeBetweenLayers: number;
+		edgeNode: number;
+	};
 	aspectRatio?: number;
 	includeHierarchyHandling?: "INCLUDE_CHILDREN" | "SEPARATE_CHILDREN";
 }): ElkLayoutOptions {

@@ -1169,5 +1169,174 @@
       ],
       "additionalProperties": false
     }
+  },
+  {
+    "name": "create_ryzome_conversation",
+    "description": "Create an empty Ryzome conversation (thread). Include the returned View URL in your reply.",
+    "parameters": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "title": {
+          "description": "Conversation title",
+          "type": "string"
+        },
+        "context": {
+          "description": "Existing document IDs to attach as initial context",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{24}$"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "get_ryzome_conversation",
+    "description": "Read a Ryzome conversation with its attached context and full message history.",
+    "parameters": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "conversation_id": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{24}$"
+        }
+      },
+      "required": [
+        "conversation_id"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "list_ryzome_conversations",
+    "description": "List Ryzome conversations, optionally filtered to pinned ones.",
+    "parameters": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "pinned": {
+          "description": "Only return pinned conversations if true",
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "update_ryzome_conversation",
+    "description": "Update a Ryzome conversation's title, pinned state, or context. Setting context replaces the attached documents; removed_context marks documents as removed without deleting them.",
+    "parameters": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "conversation_id": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{24}$"
+        },
+        "title": {
+          "type": "string"
+        },
+        "pinned": {
+          "type": "boolean"
+        },
+        "context": {
+          "description": "Replace the attached context documents with these IDs",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{24}$"
+          }
+        },
+        "removed_context": {
+          "description": "Mark these document IDs as removed from context",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{24}$"
+          }
+        }
+      },
+      "required": [
+        "conversation_id"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "add_ryzome_conversation_message",
+    "description": "Append a user message to a Ryzome conversation, optionally attaching documents as context. Returns the updated conversation.",
+    "parameters": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "conversation_id": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{24}$"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Message text to append"
+        },
+        "context": {
+          "description": "Existing document IDs to attach as context",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{24}$"
+          }
+        }
+      },
+      "required": [
+        "conversation_id",
+        "text"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "search_ryzome_conversations",
+    "description": "Search Ryzome conversations by title or message content.",
+    "parameters": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Search query"
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "delete_ryzome_conversation",
+    "description": "Delete Ryzome conversations by ID. The caller must own the conversations.",
+    "parameters": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "conversation_ids": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{24}$"
+          }
+        }
+      },
+      "required": [
+        "conversation_ids"
+      ],
+      "additionalProperties": false
+    }
   }
 ]

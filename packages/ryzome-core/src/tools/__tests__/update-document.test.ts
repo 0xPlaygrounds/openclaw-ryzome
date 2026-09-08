@@ -58,7 +58,9 @@ describe("executeUpdateDocument", () => {
 			description: "Working draft",
 			inLibrary: true,
 		});
-		expect(result.content[0].text).toContain("Document updated: **Updated spec**");
+		expect(result.content[0].text).toContain(
+			"Document updated: **Updated spec**",
+		);
 	});
 
 	it("rejects empty updates", async () => {

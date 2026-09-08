@@ -4,10 +4,7 @@ import {
 	documentContentInputSchema,
 	toDocumentContentView,
 } from "../lib/document-content.js";
-import {
-	RyzomeClient,
-	type RyzomeClientConfig,
-} from "../lib/ryzome-client.js";
+import { RyzomeClient, type RyzomeClientConfig } from "../lib/ryzome-client.js";
 
 export const updateDocumentToolName = "update_ryzome_document";
 export const updateDocumentToolDescription =
@@ -16,24 +13,24 @@ export const updateDocumentToolDescription =
 export const updateDocumentParamsSchema = z.object({
 	document_id: z.string().describe("The ID of the document to update"),
 	title: z.string().optional().describe("Replace the document title"),
-	favorite: z
-		.boolean()
-		.optional()
-		.describe("Set the document favorite state"),
+	favorite: z.boolean().optional().describe("Set the document favorite state"),
 	content: documentContentInputSchema
 		.optional()
 		.describe("Replace the full document content"),
-	append_text: z
+	append_text: z.string().optional().describe("Append text to a Text document"),
+	description: z
 		.string()
 		.optional()
-		.describe("Append text to a Text document"),
-	description: z.string().optional().describe("Update the document description"),
+		.describe("Update the document description"),
 	tags: z.array(z.string()).optional().describe("Replace the document tags"),
 	in_library: z
 		.boolean()
 		.optional()
 		.describe("Control whether the document appears in the library"),
-	archived: z.boolean().optional().describe("Archive or unarchive the document"),
+	archived: z
+		.boolean()
+		.optional()
+		.describe("Archive or unarchive the document"),
 	thumbnail_s3_key: z
 		.string()
 		.optional()

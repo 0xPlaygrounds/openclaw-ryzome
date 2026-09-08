@@ -34,6 +34,90 @@ export {
 	updateBundleParamsSchema,
 	executeUpdateBundle,
 } from "./update-bundle.js";
+import {
+	createConversationToolName,
+	createConversationToolDescription,
+	createConversationParamsSchema,
+	executeCreateConversation,
+} from "./create-conversation.js";
+export {
+	createConversationToolName,
+	createConversationToolDescription,
+	createConversationParamsSchema,
+	executeCreateConversation,
+} from "./create-conversation.js";
+import {
+	getConversationToolName,
+	getConversationToolDescription,
+	getConversationParamsSchema,
+	executeGetConversation,
+} from "./get-conversation.js";
+export {
+	getConversationToolName,
+	getConversationToolDescription,
+	getConversationParamsSchema,
+	executeGetConversation,
+} from "./get-conversation.js";
+import {
+	listConversationsToolName,
+	listConversationsToolDescription,
+	listConversationsParamsSchema,
+	executeListConversations,
+} from "./list-conversations.js";
+export {
+	listConversationsToolName,
+	listConversationsToolDescription,
+	listConversationsParamsSchema,
+	executeListConversations,
+} from "./list-conversations.js";
+import {
+	updateConversationToolName,
+	updateConversationToolDescription,
+	updateConversationParamsSchema,
+	executeUpdateConversation,
+} from "./update-conversation.js";
+export {
+	updateConversationToolName,
+	updateConversationToolDescription,
+	updateConversationParamsSchema,
+	executeUpdateConversation,
+} from "./update-conversation.js";
+import {
+	addConversationMessageToolName,
+	addConversationMessageToolDescription,
+	addConversationMessageParamsSchema,
+	executeAddConversationMessage,
+} from "./add-conversation-message.js";
+export {
+	addConversationMessageToolName,
+	addConversationMessageToolDescription,
+	addConversationMessageParamsSchema,
+	executeAddConversationMessage,
+} from "./add-conversation-message.js";
+import {
+	searchConversationsToolName,
+	searchConversationsToolDescription,
+	searchConversationsParamsSchema,
+	executeSearchConversations,
+} from "./search-conversations.js";
+export {
+	searchConversationsToolName,
+	searchConversationsToolDescription,
+	searchConversationsParamsSchema,
+	executeSearchConversations,
+} from "./search-conversations.js";
+import {
+	deleteConversationToolName,
+	deleteConversationToolDescription,
+	deleteConversationParamsSchema,
+	executeDeleteConversation,
+} from "./delete-conversation.js";
+export {
+	deleteConversationToolName,
+	deleteConversationToolDescription,
+	deleteConversationParamsSchema,
+	executeDeleteConversation,
+} from "./delete-conversation.js";
 import type { ZodObject, ZodRawShape } from "zod";
 import type { RyzomeClientConfig } from "../lib/ryzome-client.js";
 
@@ -277,5 +361,47 @@ export const toolRegistry: ToolEntry[] = [
 		description: updateBundleToolDescription,
 		paramsSchema: updateBundleParamsSchema,
 		execute: executeUpdateBundle,
+	},
+	{
+		name: createConversationToolName,
+		description: createConversationToolDescription,
+		paramsSchema: createConversationParamsSchema,
+		execute: executeCreateConversation,
+	},
+	{
+		name: getConversationToolName,
+		description: getConversationToolDescription,
+		paramsSchema: getConversationParamsSchema,
+		execute: executeGetConversation,
+	},
+	{
+		name: listConversationsToolName,
+		description: listConversationsToolDescription,
+		paramsSchema: listConversationsParamsSchema,
+		execute: executeListConversations,
+	},
+	{
+		name: updateConversationToolName,
+		description: updateConversationToolDescription,
+		paramsSchema: updateConversationParamsSchema,
+		execute: executeUpdateConversation,
+	},
+	{
+		name: addConversationMessageToolName,
+		description: addConversationMessageToolDescription,
+		paramsSchema: addConversationMessageParamsSchema,
+		execute: executeAddConversationMessage,
+	},
+	{
+		name: searchConversationsToolName,
+		description: searchConversationsToolDescription,
+		paramsSchema: searchConversationsParamsSchema,
+		execute: executeSearchConversations,
+	},
+	{
+		name: deleteConversationToolName,
+		description: deleteConversationToolDescription,
+		paramsSchema: deleteConversationParamsSchema,
+		execute: executeDeleteConversation,
 	},
 ];

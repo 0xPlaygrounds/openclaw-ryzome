@@ -76,6 +76,13 @@ Environment variables `RYZOME_API_KEY`, `RYZOME_OPENCLAW_API_KEY`, or `PLUGIN_US
 | `create_ryzome_bundle` | Create an ordered collection of existing documents |
 | `get_ryzome_bundle` | Retrieve a bundle and its member metadata, including access status |
 | `update_ryzome_bundle` | Add, remove, or reorder documents in a bundle |
+| `create_ryzome_conversation` | Create an empty conversation (thread), optionally with context documents |
+| `get_ryzome_conversation` | Read a conversation with its context and full message history |
+| `list_ryzome_conversations` | List conversations, optionally filtered to pinned ones |
+| `update_ryzome_conversation` | Update a conversation's title, pinned state, or context |
+| `add_ryzome_conversation_message` | Append a user message to a conversation, optionally with context |
+| `search_ryzome_conversations` | Search conversations by title or message content |
+| `delete_ryzome_conversation` | Delete conversations by ID (caller must own them) |
 
 ## Slash Commands
 

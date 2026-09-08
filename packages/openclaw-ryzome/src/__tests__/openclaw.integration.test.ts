@@ -91,7 +91,9 @@ async function linkMissingNodeModules(sourceDir: string, targetDir: string) {
 				continue;
 			}
 
-			const scopeEntries = await fs.readdir(sourcePath, { withFileTypes: true });
+			const scopeEntries = await fs.readdir(sourcePath, {
+				withFileTypes: true,
+			});
 			for (const scopeEntry of scopeEntries) {
 				const scopedSourcePath = path.join(sourcePath, scopeEntry.name);
 				const scopedTargetPath = path.join(targetPath, scopeEntry.name);
@@ -519,12 +521,10 @@ afterEach(async () => {
 		}),
 	);
 	await Promise.all(
-		[...createdRuntimeLinks]
-			.reverse()
-			.map(async (linkPath) => {
-				await fs.rm(linkPath, { recursive: true, force: true });
-				createdRuntimeLinks.delete(linkPath);
-			}),
+		[...createdRuntimeLinks].reverse().map(async (linkPath) => {
+			await fs.rm(linkPath, { recursive: true, force: true });
+			createdRuntimeLinks.delete(linkPath);
+		}),
 	);
 	runtimeLinksPrepared = false;
 });

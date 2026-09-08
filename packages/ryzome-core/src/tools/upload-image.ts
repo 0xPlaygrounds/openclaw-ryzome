@@ -3,10 +3,7 @@ import { createHash } from "node:crypto";
 import { ObjectId } from "bson";
 import { buildCanvasAppUrl } from "../lib/app-url.js";
 import type { PatchOperation } from "../lib/client/index.js";
-import {
-	RyzomeClient,
-	type RyzomeClientConfig,
-} from "../lib/ryzome-client.js";
+import { RyzomeClient, type RyzomeClientConfig } from "../lib/ryzome-client.js";
 import { retryStage } from "../lib/retry.js";
 
 export const uploadImageToolName = "upload_ryzome_image";
@@ -128,9 +125,7 @@ export async function executeUploadImage(
 		});
 	}
 
-	await retryStage(() =>
-		client.patchCanvas(params.canvas_id, { operations }),
-	);
+	await retryStage(() => client.patchCanvas(params.canvas_id, { operations }));
 
 	const canvasUrl = buildCanvasAppUrl(clientConfig.appUrl, params.canvas_id);
 

@@ -168,9 +168,7 @@ describe("MCP resources", () => {
 		expect(parsed).toHaveLength(2);
 		expect(parsed[0].id).toBe("aaa111");
 		expect(parsed[0].name).toBe("Research Canvas");
-		expect(parsed[0].url).toBe(
-			"https://ryzome.ai/workspace?document=aaa111",
-		);
+		expect(parsed[0].url).toBe("https://ryzome.ai/workspace?document=aaa111");
 		expect(parsed[1].id).toBe("bbb222");
 	});
 
@@ -194,9 +192,7 @@ describe("MCP resources", () => {
 		expect(parsed).toHaveLength(1);
 		expect(parsed[0].id).toBe("doc123");
 		expect(parsed[0].contentType).toBe("Text");
-		expect(parsed[0].url).toBe(
-			"https://ryzome.ai/workspace?document=doc123",
-		);
+		expect(parsed[0].url).toBe("https://ryzome.ai/workspace?document=doc123");
 	});
 
 	it("reads ryzome://canvas/{id} and returns markdown", async () => {

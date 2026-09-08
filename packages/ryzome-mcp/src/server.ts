@@ -14,6 +14,8 @@ import {
 	RyzomeClient,
 	toolRegistry,
 	formatCanvasAsMarkdown,
+	formatConversationAsMarkdown,
+	buildConversationAppUrl,
 } from "@ryzome-ai/ryzome-core";
 import type { RyzomeClientConfig } from "@ryzome-ai/ryzome-core";
 
@@ -279,6 +281,109 @@ export function createRyzomeMcpServer(): McpServer {
 			const client = new RyzomeClient(clientConfig);
 			const document = await client.getDocument(resourceIdToString(id));
 			const markdown = formatDocumentAsMarkdown(document, {
+				appUrl: clientConfig.appUrl,
+			});
+
+			return {
+				contents: [
+					{
+						uri: uri.href,
+						mimeType: "text/markdown" as const,
+						text: markdown,
+					},
+				],
+			};
+		},
+	);
+
+	server.resource(
+		"conversation-list",
+		"ryzome://conversations",
+		{
+			description:
+				"List all Ryzome conversations with their IDs, titles, and pinned state",
+			mimeType: "application/json",
+		},
+		async (uri) => {
+			if (!clientConfig) {
+				return {
+					contents: [
+						{
+							uri: uri.href,
+							mimeType: "text/plain" as const,
+							text: "Ryzome API key not configured.",
+						},
+					],
+				};
+			}
+
+			const client = new RyzomeClient(clientConfig);
+			const conversations = await client.listConversations();
+			const summaries = conversations.map((conversation) => ({
+				id: conversation._id.$oid,
+				title: conversation.title,
+				pinned: conversation.pinned ?? false,
+				updatedAt: conversation.updatedAt,
+				url: buildConversationAppUrl(
+					clientConfig.appUrl,
+					conversation._id.$oid,
+				),
+			}));
+
+			return {
+				contents: [
+					{
+						uri: uri.href,
+						mimeType: "application/json" as const,
+						text: JSON.stringify(summaries, null, 2),
+					},
+				],
+			};
+		},
+	);
+
+	server.resource(
+		"conversation",
+		new ResourceTemplate("ryzome://conversation/{id}", {
+			list: async () => {
+				if (!clientConfig) return { resources: [] };
+
+				try {
+					const client = new RyzomeClient(clientConfig);
+					const conversations = await client.listConversations();
+					return {
+						resources: conversations.map((conversation) => ({
+							uri: `ryzome://conversation/${conversation._id.$oid}`,
+							name: conversation.title,
+							mimeType: "text/markdown" as const,
+						})),
+					};
+				} catch {
+					return { resources: [] };
+				}
+			},
+		}),
+		{
+			description:
+				"Retrieve a Ryzome conversation as structured markdown with context and messages",
+			mimeType: "text/markdown",
+		},
+		async (uri, { id }) => {
+			if (!clientConfig) {
+				return {
+					contents: [
+						{
+							uri: uri.href,
+							mimeType: "text/plain" as const,
+							text: "Ryzome API key not configured.",
+						},
+					],
+				};
+			}
+
+			const client = new RyzomeClient(clientConfig);
+			const conversation = await client.getConversation(resourceIdToString(id));
+			const markdown = formatConversationAsMarkdown(conversation, {
 				appUrl: clientConfig.appUrl,
 			});
 

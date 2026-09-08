@@ -4,10 +4,7 @@ import {
 	documentContentInputSchema,
 	toDocumentContentView,
 } from "../lib/document-content.js";
-import {
-	RyzomeClient,
-	type RyzomeClientConfig,
-} from "../lib/ryzome-client.js";
+import { RyzomeClient, type RyzomeClientConfig } from "../lib/ryzome-client.js";
 
 export const createDocumentToolName = "create_ryzome_document";
 export const createDocumentToolDescription =
@@ -34,9 +31,7 @@ export async function executeCreateDocument(
 		title: params.title,
 		description: params.description,
 		tags: params.tags,
-		content: params.content
-			? toDocumentContentView(params.content)
-			: undefined,
+		content: params.content ? toDocumentContentView(params.content) : undefined,
 	});
 
 	const documentUrl = buildDocumentViewAppUrl(clientConfig.appUrl, document);

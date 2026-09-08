@@ -43,11 +43,11 @@ export type RunnerOutput = RunnerSuccess | RunnerFailure;
 function notConfiguredError(): RunnerFailure {
 	return {
 		ok: false,
-			error: {
-				name: "ConfigError",
-				message:
-					"Ryzome API key not configured. Set `RYZOME_API_KEY` or create `~/.hermes/ryzome.json`.",
-			},
+		error: {
+			name: "ConfigError",
+			message:
+				"Ryzome API key not configured. Set `RYZOME_API_KEY` or create `~/.hermes/ryzome.json`.",
+		},
 	};
 }
 
@@ -106,7 +106,9 @@ function resolveClientConfig(
 }
 
 export async function runTool(input: RunnerInput): Promise<RunnerOutput> {
-	const tool = toolRegistry.find((candidate) => candidate.name === input.toolName);
+	const tool = toolRegistry.find(
+		(candidate) => candidate.name === input.toolName,
+	);
 	if (!tool) {
 		return {
 			ok: false,

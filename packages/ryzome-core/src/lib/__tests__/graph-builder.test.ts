@@ -189,9 +189,7 @@ describe("buildCanvasGraph", () => {
 
 		const nodes = createNodeOps(graph.operations);
 
-		const groupNodes = nodes.filter(
-			(n) => n.data?._type === "Group",
-		);
+		const groupNodes = nodes.filter((n) => n.data?._type === "Group");
 		expect(groupNodes).toHaveLength(1);
 		const groupNode = groupNodes[0];
 
@@ -205,10 +203,7 @@ describe("buildCanvasGraph", () => {
 		expect(nodeA && nodeB && nodeC).toBeTruthy();
 		if (!nodeA || !nodeB || !nodeC || !nodeById.size) return;
 
-		const contains = (
-			outer: typeof groupNode,
-			inner: (typeof nodes)[number],
-		) =>
+		const contains = (outer: typeof groupNode, inner: (typeof nodes)[number]) =>
 			(inner.x ?? 0) >= (outer.x ?? 0) &&
 			(inner.y ?? 0) >= (outer.y ?? 0) &&
 			(inner.x ?? 0) + (inner.width ?? 0) <=
@@ -250,10 +245,27 @@ describe("buildCanvasGraph", () => {
 	it("smoke: research canvas with multiple groups produces tight group rects", async () => {
 		const steps: StepInput[] = [
 			{ id: "g1-a", title: "G1 A", description: "Root A", group: "g1" },
-			{ id: "g1-b", title: "G1 B", description: "Child A", dependsOn: ["g1-a"], group: "g1" },
+			{
+				id: "g1-b",
+				title: "G1 B",
+				description: "Child A",
+				dependsOn: ["g1-a"],
+				group: "g1",
+			},
 			{ id: "g2-a", title: "G2 A", description: "Root B", group: "g2" },
-			{ id: "g2-b", title: "G2 B", description: "Child B", dependsOn: ["g2-a"], group: "g2" },
-			{ id: "bridge", title: "Bridge", description: "Joins", dependsOn: ["g1-b", "g2-b"] },
+			{
+				id: "g2-b",
+				title: "G2 B",
+				description: "Child B",
+				dependsOn: ["g2-a"],
+				group: "g2",
+			},
+			{
+				id: "bridge",
+				title: "Bridge",
+				description: "Joins",
+				dependsOn: ["g1-b", "g2-b"],
+			},
 		];
 		const groups = [
 			{ id: "g1", title: "Phase 1" },
@@ -374,9 +386,7 @@ describe("buildCanvasGraph", () => {
 
 		const titleOf = (n: (typeof nodes1)[number]) =>
 			n.data?._type === "NewDocument" ? n.data._content.title : null;
-		expect(
-			nodes1.map((n) => ({ x: n.x, y: n.y, title: titleOf(n) })),
-		).toEqual(
+		expect(nodes1.map((n) => ({ x: n.x, y: n.y, title: titleOf(n) }))).toEqual(
 			nodes2.map((n) => ({ x: n.x, y: n.y, title: titleOf(n) })),
 		);
 	});

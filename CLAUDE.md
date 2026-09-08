@@ -6,7 +6,7 @@ This file provides guidance to coding agents working in this repository (Claude 
 
 A pnpm monorepo providing Ryzome canvas tools for AI agents via multiple integration surfaces:
 
-- `packages/ryzome-core` (`@ryzome-ai/ryzome-core`) — Shared logic: API client, 14 tools, graph builder, layout, canvas markdown formatter
+- `packages/ryzome-core` (`@ryzome-ai/ryzome-core`) — Shared logic: API client, 21 tools, graph builder, layout, canvas markdown formatter
 - `packages/openclaw-ryzome` (`@ryzome-ai/openclaw-ryzome`) — OpenClaw plugin adapter (thin wrapper over core)
 - `packages/hermes-ryzome` (`hermes-ryzome-plugin` on PyPI) — Hermes plugin source package. Standard Hermes install repo: `0xPlaygrounds/hermes-ryzome-plugin`. This monorepo copy stays tied to the shared `ryzome-core` development flow.
 - `packages/ryzome-mcp` (`@ryzome-ai/ryzome-mcp`) — MCP server with tools + resources for Claude Code / any MCP client
@@ -46,7 +46,7 @@ Integration tests hit the live Ryzome API and are gated by env vars: `RYZOME_ENA
 - `packages/ryzome-core/src/lib/canvas-executor.ts` — Orchestrates create → build graph → patch → return URL.
 - `packages/ryzome-core/src/lib/format-canvas-markdown.ts` — Converts `CanvasEditorView` to LLM-readable markdown. Used by MCP resources.
 - `packages/ryzome-core/src/lib/retry.ts` — Max 2 retries with exponential backoff (250ms base).
-- `packages/ryzome-core/src/tools/` — 14 tools spanning canvas creation, document CRUD, library promotion, and image upload. Zod schemas + execute functions.
+- `packages/ryzome-core/src/tools/` — 21 tools spanning canvas creation, document CRUD, library promotion, and image upload. Zod schemas + execute functions.
 
 **`ryzome-mcp`** — MCP server (`packages/ryzome-mcp/src/server.ts`):
 
@@ -61,7 +61,7 @@ Onboarding invariants (to avoid re-debugging the same phantom):
 
 - Entry uses `definePluginEntry` from `openclaw/plugin-sdk/plugin-entry`; no hand-rolled `PluginApi` type.
 - Tools register **unconditionally** regardless of whether the API key is set. The api-key check is lazy: each tool's `execute` resolves config at call time and throws a setup-hint error if missing. Do not reintroduce an early return in `register()` — that's what made the plugin appear "broken" with no tools visible.
-- The manifest declares `contracts.tools` (all 14 tool names) and `activation.onCommands: ["ryzome"]`. `contracts.tools` is what makes OpenClaw auto-allowlist `openclaw-ryzome` into `plugins.allow` once a config entry exists — agents should **not** "fix" missing tools by writing to `plugins.allow` from the plugin CLI.
+- The manifest declares `contracts.tools` (all 21 tool names) and `activation.onCommands: ["ryzome"]`. `contracts.tools` is what makes OpenClaw auto-allowlist `openclaw-ryzome` into `plugins.allow` once a config entry exists — agents should **not** "fix" missing tools by writing to `plugins.allow` from the plugin CLI.
 - Onboarding path is `openclaw ryzome setup --key <api-key>` (and `openclaw ryzome status` to verify). The global `openclaw setup` wizard does not have a tool-plugin step today; upstream request tracked at [openclaw/openclaw#68115](https://github.com/openclaw/openclaw/issues/68115).
 
 **`hermes-ryzome`** — Hermes plugin source package (`packages/hermes-ryzome`). Standard user install path is the standalone repo `0xPlaygrounds/hermes-ryzome-plugin` via `hermes plugins install 0xPlaygrounds/hermes-ryzome-plugin --enable`, which prompts for `RYZOME_API_KEY` from `plugin.yaml` and saves it to `~/.hermes/.env`. Hermes general plugins should prefer `requires_env` + tools + optional slash commands (here: `/ryzome-status`), not `ctx.register_cli_command()`. Do not tell users to symlink `packages/hermes-ryzome` unless they are developing against this monorepo.

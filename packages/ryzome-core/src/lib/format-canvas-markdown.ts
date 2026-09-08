@@ -35,7 +35,10 @@ export function formatCanvasAsMarkdown(
 		lines.push("", canvas.description);
 	}
 	if (opts?.appUrl) {
-		lines.push("", `> View: ${buildCanvasAppUrl(opts.appUrl, canvas._id.$oid)}`);
+		lines.push(
+			"",
+			`> View: ${buildCanvasAppUrl(opts.appUrl, canvas._id.$oid)}`,
+		);
 	}
 
 	const nodeIndex = new Map<string, { idx: number; title: string }>();
