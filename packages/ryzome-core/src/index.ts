@@ -17,6 +17,10 @@ export {
 } from "./lib/app-url.js";
 export { formatCanvasAsMarkdown } from "./lib/format-canvas-markdown.js";
 export { formatDocumentAsMarkdown } from "./lib/format-document-markdown.js";
+export {
+	formatConversationAsMarkdown,
+	buildConversationAppUrl,
+} from "./lib/format-conversation-markdown.js";
 export type { CanvasEditorView } from "./lib/format-canvas-markdown.js";
 export type {
 	DocumentContentView,

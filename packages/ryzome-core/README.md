@@ -1,6 +1,6 @@
 # @ryzome-ai/ryzome-core
 
-Shared logic for Ryzome canvas integrations: API client, 14 tools, graph builder, layout engine, and markdown formatter.
+Shared logic for Ryzome canvas integrations: API client, 21 tools, graph builder, layout engine, and markdown formatter.
 
 This package powers [`@ryzome-ai/ryzome-mcp`](../ryzome-mcp), [`@ryzome-ai/openclaw-ryzome`](../openclaw-ryzome), and the Hermes plugin in [`packages/hermes-ryzome`](../hermes-ryzome) (published to PyPI as `hermes-ryzome-plugin`).
 
@@ -21,7 +21,7 @@ npm install @ryzome-ai/ryzome-core
 
 ## Tools
 
-The `toolRegistry` array contains 11 ready-to-register tools:
+The `toolRegistry` array contains 21 ready-to-register tools:
 
 | Tool name | Description |
 |-----------|-------------|
@@ -39,6 +39,13 @@ The `toolRegistry` array contains 11 ready-to-register tools:
 | `create_ryzome_bundle` | Create an ordered collection of existing documents |
 | `get_ryzome_bundle` | Retrieve a bundle and its member metadata, including access status |
 | `update_ryzome_bundle` | Add, remove, or reorder documents in a bundle |
+| `create_ryzome_conversation` | Create an empty conversation (thread), optionally with context documents |
+| `get_ryzome_conversation` | Read a conversation with its context and full message history |
+| `list_ryzome_conversations` | List conversations, optionally filtered to pinned ones |
+| `update_ryzome_conversation` | Update a conversation's title, pinned state, or context |
+| `add_ryzome_conversation_message` | Append a user message to a conversation, optionally with context |
+| `search_ryzome_conversations` | Search conversations by title or message content |
+| `delete_ryzome_conversation` | Delete conversations by ID (caller must own them) |
 
 Each tool entry has `name`, `description`, `paramsSchema` (Zod), and an `execute` function.
 

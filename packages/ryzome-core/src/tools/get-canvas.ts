@@ -1,8 +1,5 @@
 import { z } from "zod";
-import {
-	RyzomeClient,
-	type RyzomeClientConfig,
-} from "../lib/ryzome-client.js";
+import { RyzomeClient, type RyzomeClientConfig } from "../lib/ryzome-client.js";
 
 export const getCanvasToolName = "get_ryzome_canvas";
 export const getCanvasToolDescription =

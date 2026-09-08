@@ -38,7 +38,9 @@ function logSetupHint(api: OpenClawPluginApi): void {
 function toolLabel(name: string): string {
 	return name
 		.split("_")
-		.map((part) => (part.length > 0 ? part[0].toUpperCase() + part.slice(1) : part))
+		.map((part) =>
+			part.length > 0 ? part[0].toUpperCase() + part.slice(1) : part,
+		)
 		.join(" ");
 }
 

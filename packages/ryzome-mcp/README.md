@@ -46,6 +46,13 @@ Add to your `.mcp.json` or MCP client config:
 | `create_ryzome_bundle` | Create an ordered collection of existing documents |
 | `get_ryzome_bundle` | Retrieve a bundle and its member metadata, including access status |
 | `update_ryzome_bundle` | Add, remove, or reorder documents in a bundle |
+| `create_ryzome_conversation` | Create an empty conversation (thread), optionally with context documents |
+| `get_ryzome_conversation` | Read a conversation with its context and full message history |
+| `list_ryzome_conversations` | List conversations, optionally filtered to pinned ones |
+| `update_ryzome_conversation` | Update a conversation's title, pinned state, or context |
+| `add_ryzome_conversation_message` | Append a user message to a conversation, optionally with context |
+| `search_ryzome_conversations` | Search conversations by title or message content |
+| `delete_ryzome_conversation` | Delete conversations by ID (caller must own them) |
 
 Use `list_ryzome_documents` with `content_types: ["Bundle"]` to discover bundles.
 For current API contracts and features that still need backend authentication support,
@@ -59,8 +66,10 @@ see [API compatibility](../../docs/api-compatibility.md).
 | `ryzome://canvas/{id}` | Dynamic | Single canvas rendered as structured markdown with nodes and connections |
 | `ryzome://documents` | Static | JSON list of library-visible document summaries (ID, title, content type, URL) |
 | `ryzome://document/{id}` | Dynamic | Single document rendered as structured markdown with its content |
+| `ryzome://conversations` | Static | JSON list of all conversation summaries (ID, title, pinned state, URL) |
+| `ryzome://conversation/{id}` | Dynamic | Single conversation rendered as structured markdown with context and messages |
 
-The dynamic resources support `list` — MCP clients can enumerate all available canvases and documents.
+The dynamic resources support `list` — MCP clients can enumerate all available canvases, documents, and conversations.
 
 ## Environment Variables
 
