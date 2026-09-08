@@ -81,7 +81,13 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Parse committed changesets
-        run: pnpm changeset status
+        run: |
+          pending=$(find .changeset -maxdepth 1 -name '*.md' ! -name 'README.md' | wc -l | tr -d ' ')
+          if [ "$pending" -eq 0 ]; then
+            echo "No changeset files to parse."
+            exit 0
+          fi
+          pnpm changeset status
 
       - name: Build packages
         run: pnpm build
