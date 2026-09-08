@@ -1,3 +1,5 @@
+import { formatBundleAsMarkdown } from "./format-bundle-markdown.js";
+import { bundleDocumentSchema } from "./client/bundle.js";
 import { buildDocumentViewAppUrl } from "./app-url.js";
 import type { DocumentView } from "./client/index.js";
 import { formatCanvasAsMarkdown } from "./format-canvas-markdown.js";
@@ -26,6 +28,8 @@ export function formatDocumentAsMarkdown(
 	document: DocumentView,
 	opts?: { appUrl?: string },
 ): string {
+	if (document.content._type === "Bundle")
+		return formatBundleAsMarkdown(bundleDocumentSchema.parse(document), opts);
 	if (document.content._type === "Canvas") {
 		return formatCanvasAsMarkdown(
 			{
@@ -52,10 +56,7 @@ export function formatDocumentAsMarkdown(
 	lines.push("", `> Type: ${document.content._type}`);
 
 	if (opts?.appUrl) {
-		lines.push(
-			"",
-			`> View: ${buildDocumentViewAppUrl(opts.appUrl, document)}`,
-		);
+		lines.push("", `> View: ${buildDocumentViewAppUrl(opts.appUrl, document)}`);
 	}
 
 	if (document.tags?.length) {

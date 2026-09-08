@@ -19,4 +19,7 @@ provides_tools:
   - update_ryzome_document
   - save_ryzome_node_to_library
   - upload_ryzome_image
+  - create_ryzome_bundle
+  - get_ryzome_bundle
+  - update_ryzome_bundle
 provides_hooks: []

@@ -443,7 +443,8 @@
               "File",
               "Youtube",
               "Website",
-              "Canvas"
+              "Canvas",
+              "Bundle"
             ]
           }
         }
@@ -1023,6 +1024,148 @@
       "required": [
         "canvas_id",
         "image_url"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "create_ryzome_bundle",
+    "description": "Create an ordered Ryzome bundle containing existing documents. Include the returned View URL in your reply.",
+    "parameters": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "document_ids": {
+          "default": [],
+          "description": "Existing document IDs in initial order",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{24}$"
+          }
+        }
+      },
+      "required": [
+        "document_ids"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "get_ryzome_bundle",
+    "description": "Read a Ryzome bundle and its ordered document metadata, including unavailable members.",
+    "parameters": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "bundle_id": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{24}$"
+        }
+      },
+      "required": [
+        "bundle_id"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "update_ryzome_bundle",
+    "description": "Add, remove, or reorder documents in a Ryzome bundle. Removing membership does not delete the document. Reordering must include every current member exactly once. System bundles enforce server restrictions.",
+    "parameters": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "bundle_id": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{24}$"
+        },
+        "operations": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "_type": {
+                    "type": "string",
+                    "const": "addDocument"
+                  },
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-fA-F0-9]{24}$"
+                  },
+                  "position": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "_type",
+                  "id"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "_type": {
+                    "type": "string",
+                    "const": "removeDocument"
+                  },
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-fA-F0-9]{24}$"
+                  }
+                },
+                "required": [
+                  "_type",
+                  "id"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "_type": {
+                    "type": "string",
+                    "const": "reorderDocuments"
+                  },
+                  "ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^[a-fA-F0-9]{24}$"
+                    }
+                  }
+                },
+                "required": [
+                  "_type",
+                  "ids"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        }
+      },
+      "required": [
+        "bundle_id",
+        "operations"
       ],
       "additionalProperties": false
     }

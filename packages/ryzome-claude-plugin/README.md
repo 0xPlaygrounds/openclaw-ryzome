@@ -30,6 +30,9 @@ The first command registers this repo as a plugin marketplace; the second instal
 | `update_ryzome_document` | Update document metadata or content, including appending text |
 | `save_ryzome_node_to_library` | Promote a canvas node's backing document into the library |
 | `upload_ryzome_image` | Upload an image from a URL to an existing canvas |
+| `create_ryzome_bundle` | Create an ordered collection of existing documents |
+| `get_ryzome_bundle` | Retrieve a bundle and its member metadata, including access status |
+| `update_ryzome_bundle` | Add, remove, or reorder documents in a bundle |
 
 ### MCP Resources
 

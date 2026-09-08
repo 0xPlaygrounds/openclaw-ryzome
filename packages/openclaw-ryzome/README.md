@@ -83,6 +83,9 @@ Environment variables `RYZOME_OPENCLAW_API_KEY` or `RYZOME_API_KEY` also work.
 | `update_ryzome_document` | Update a standalone Ryzome document using document operations and metadata changes |
 | `save_ryzome_node_to_library` | Promote an existing canvas node's backing document into the library |
 | `upload_ryzome_image` | Upload an image from a URL to an existing canvas as an image node |
+| `create_ryzome_bundle` | Create an ordered collection of existing documents |
+| `get_ryzome_bundle` | Retrieve a bundle and its member metadata, including access status |
+| `update_ryzome_bundle` | Add, remove, or reorder documents in a bundle |
 
 ### `create_ryzome_canvas`
 

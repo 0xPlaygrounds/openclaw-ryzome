@@ -43,6 +43,13 @@ Add to your `.mcp.json` or MCP client config:
 | `update_ryzome_document` | Update a standalone Ryzome document using document operations and metadata changes |
 | `save_ryzome_node_to_library` | Promote an existing canvas node's backing document into the library |
 | `upload_ryzome_image` | Upload an image from a URL to an existing canvas |
+| `create_ryzome_bundle` | Create an ordered collection of existing documents |
+| `get_ryzome_bundle` | Retrieve a bundle and its member metadata, including access status |
+| `update_ryzome_bundle` | Add, remove, or reorder documents in a bundle |
+
+Use `list_ryzome_documents` with `content_types: ["Bundle"]` to discover bundles.
+For current API contracts and features that still need backend authentication support,
+see [API compatibility](../../docs/api-compatibility.md).
 
 ## Resources
 

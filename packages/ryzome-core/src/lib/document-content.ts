@@ -25,6 +25,7 @@ export const documentContentTypeSchema = z.enum([
 	"Youtube",
 	"Website",
 	"Canvas",
+	"Bundle",
 ]);
 
 const textDocumentContentSchema = z.object({
@@ -104,12 +105,17 @@ export const documentOperationInputSchema = z.discriminatedUnion("_type", [
 	}),
 ]);
 
-export type DocumentOperationInput = z.infer<typeof documentOperationInputSchema>;
+export type DocumentOperationInput = z.infer<
+	typeof documentOperationInputSchema
+>;
 
 export function toDocumentContentView(
 	content: DocumentContentInput,
-): DocumentContentView {
-	return content as unknown as DocumentContentView;
+): Exclude<DocumentContentView, { _type: "Bundle" }> {
+	return content as unknown as Exclude<
+		DocumentContentView,
+		{ _type: "Bundle" }
+	>;
 }
 
 export function toDocumentOperation(
@@ -125,6 +131,8 @@ export function toDocumentOperation(
 	return operation as DocumentOperation;
 }
 
-export function getDocumentUrlType(document: Pick<DocumentView, "content">): string {
+export function getDocumentUrlType(
+	document: Pick<DocumentView, "content">,
+): string {
 	return document.content._type;
 }

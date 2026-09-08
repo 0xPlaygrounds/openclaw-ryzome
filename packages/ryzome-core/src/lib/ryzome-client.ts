@@ -1,4 +1,11 @@
 import {
+	bundleDocumentSchema,
+	patchBundleResponseSchema,
+	type BundleDocument,
+	type PatchBundleRequest,
+} from "./client/bundle.js";
+import { documentListResponseSchema } from "./client/document-list.js";
+import {
 	type CanvasEditorView,
 	createApiClient,
 	type CreateCanvasRequest,
@@ -30,6 +37,7 @@ export type RyzomeRequestStage =
 	| "listDocuments"
 	| "patchCanvas"
 	| "patchDocument"
+	| "patchBundle"
 	| "updateDocumentMetadata"
 	| "patchSharingConfig"
 	| "getUploadUrl"
@@ -265,7 +273,9 @@ export class RyzomeClient {
 		}
 	}
 
-	async createDocument(req: CreateDocumentRequestDocument): Promise<DocumentView> {
+	async createDocument(
+		req: CreateDocumentRequestDocument,
+	): Promise<DocumentView> {
 		try {
 			const { data, error, response } = await this.client.POST("/document", {
 				body: {
@@ -389,17 +399,21 @@ export class RyzomeClient {
 	): Promise<ListDocumentsResponse> {
 		const path = "/document";
 
+		let httpResponse: Response | undefined;
 		try {
 			const { data, error, response } = await this.client.GET("/document", {
+				parseAs: "text",
 				params: {
 					query: {
-						...(opts?.tag ? { tag: opts.tag } : {}),
-						...(opts?.favorite != null ? { isFavorite: opts.favorite } : {}),
+						...(opts?.tag ? { tags: [opts.tag] } : {}),
+						...(opts?.favorite != null ? { pinned: opts.favorite } : {}),
 					},
 				},
 			});
 
-			if (!response.ok || !data) {
+			httpResponse = response;
+
+			if (!response.ok) {
 				throw this.buildHttpError({
 					stage: "listDocuments",
 					method: "GET",
@@ -409,25 +423,116 @@ export class RyzomeClient {
 				});
 			}
 
-			const documents = data.filter((doc) => {
+			const parsed = documentListResponseSchema.safeParse(
+				JSON.parse(data ?? ""),
+			);
+			if (!parsed.success) {
+				throw new Error(
+					`Invalid document list response: ${parsed.error.message}`,
+				);
+			}
+
+			const documents = parsed.data.documents.filter((doc) => {
 				if (opts?.inLibraryOnly && !doc.inLibrary) return false;
 				if (
 					opts?.contentTypes?.length &&
-					!opts.contentTypes.includes(doc.content._type)
+					!opts.contentTypes.some((type) => type === doc.content._type)
 				) {
 					return false;
 				}
 				return true;
 			});
 
-			return { data: documents };
+			return {
+				data: documents.map((doc) => ({ ...doc, isFavorite: doc.pinned })),
+			};
 		} catch (error) {
 			if (error instanceof RyzomeApiError) throw error;
+			if (httpResponse) {
+				throw new RyzomeApiError({
+					stage: "listDocuments",
+					method: "GET",
+					path,
+					status: httpResponse.status,
+					body: stringifyErrorBody(error),
+					retryable: false,
+					cause: error,
+				});
+			}
 			throw this.buildNetworkError({
 				stage: "listDocuments",
 				method: "GET",
 				path,
 				error,
+			});
+		}
+	}
+
+	async getBundle(bundleId: string): Promise<BundleDocument> {
+		return bundleDocumentSchema.parse(await this.getDocument(bundleId));
+	}
+
+	async createBundle(params: {
+		title?: string;
+		description?: string;
+		tags?: string[];
+		documentIds: string[];
+	}): Promise<BundleDocument> {
+		return bundleDocumentSchema.parse(
+			await this.createDocument({
+				title: params.title,
+				description: params.description,
+				tags: params.tags,
+				content: { _type: "Bundle", _content: { ids: params.documentIds } },
+			}),
+		);
+	}
+
+	async patchBundle(
+		bundleId: string,
+		request: PatchBundleRequest,
+	): Promise<void> {
+		const path = `/bundle/${bundleId}`;
+		let httpResponse: Response | undefined;
+		try {
+			const { data, error, response } = await this.client.PATCH(
+				"/bundle/{bundle_id}",
+				{
+					parseAs: "text",
+					params: { path: { bundle_id: bundleId } },
+					body: request,
+				},
+			);
+			httpResponse = response;
+			if (!response.ok)
+				throw this.buildHttpError({
+					stage: "patchBundle",
+					method: "PATCH",
+					path,
+					response,
+					error,
+					documentId: bundleId,
+				});
+			patchBundleResponseSchema.parse(JSON.parse(data ?? ""));
+		} catch (error) {
+			if (error instanceof RyzomeApiError) throw error;
+			if (httpResponse)
+				throw new RyzomeApiError({
+					stage: "patchBundle",
+					method: "PATCH",
+					path,
+					status: httpResponse.status,
+					body: stringifyErrorBody(error),
+					retryable: false,
+					cause: error,
+					documentId: bundleId,
+				});
+			throw this.buildNetworkError({
+				stage: "patchBundle",
+				method: "PATCH",
+				path,
+				error,
+				documentId: bundleId,
 			});
 		}
 	}

@@ -244,40 +244,42 @@ describe("RyzomeClient", () => {
 	it("filters documents client-side for library visibility and content type", async () => {
 		const fetchMock = vi.fn().mockResolvedValue(
 			new Response(
-				JSON.stringify([
-					{
-						_id: { $oid: "doc123" },
-						title: "Specs",
-						description: "Draft spec",
-						content: {
-							_type: "Text",
-							_content: { text: "Hello world" },
+				JSON.stringify({
+					documents: [
+						{
+							_id: { $oid: "doc123" },
+							title: "Specs",
+							description: "Draft spec",
+							content: {
+								_type: "Text",
+								_content: { text: "Hello world" },
+							},
+							generated: false,
+							inLibrary: true,
+							pinned: false,
+							ownerId: "owner1",
+							tags: [],
+							createdAt: "2026-01-01T00:00:00Z",
+							updatedAt: "2026-01-01T00:00:00Z",
 						},
-						generated: false,
-						inLibrary: true,
-						isFavorite: false,
-						ownerId: "owner1",
-						tags: [],
-						createdAt: "2026-01-01T00:00:00Z",
-						updatedAt: "2026-01-01T00:00:00Z",
-					},
-					{
-						_id: { $oid: "doc456" },
-						title: "Private note",
-						description: null,
-						content: {
-							_type: "Website",
-							_content: { url: "https://example.com" },
+						{
+							_id: { $oid: "doc456" },
+							title: "Private note",
+							description: null,
+							content: {
+								_type: "Website",
+								_content: { url: "https://example.com" },
+							},
+							generated: false,
+							inLibrary: false,
+							pinned: false,
+							ownerId: "owner1",
+							tags: [],
+							createdAt: "2026-01-01T00:00:00Z",
+							updatedAt: "2026-01-01T00:00:00Z",
 						},
-						generated: false,
-						inLibrary: false,
-						isFavorite: false,
-						ownerId: "owner1",
-						tags: [],
-						createdAt: "2026-01-01T00:00:00Z",
-						updatedAt: "2026-01-01T00:00:00Z",
-					},
-				]),
+					],
+				}),
 				{
 					status: 200,
 					headers: { "Content-Type": "application/json" },

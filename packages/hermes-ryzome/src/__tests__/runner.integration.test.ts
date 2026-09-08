@@ -20,8 +20,8 @@ const LIBRARY_DOCUMENT_ID = "507f1f77bcf86cd799439013";
 const NODE_ID = "507f1f77bcf86cd799439014";
 const NOW = "2026-04-15T00:00:00.000Z";
 const PNG_BYTES = Buffer.from([
-	0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00, 0x0d,
-	0x49, 0x48, 0x44, 0x52,
+	0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00, 0x0d, 0x49,
+	0x48, 0x44, 0x52,
 ]);
 
 function buildTextDocument(overrides: Record<string, unknown> = {}) {
@@ -139,7 +139,9 @@ async function startStubServer() {
 			const body = await readJsonBody(req);
 			requests.push({ method, url, apiKey, body });
 
-			const first = Array.isArray((body as { documents?: unknown[] })?.documents)
+			const first = Array.isArray(
+				(body as { documents?: unknown[] })?.documents,
+			)
 				? (body as { documents: Array<Record<string, unknown>> }).documents[0]
 				: undefined;
 			const contentType =
@@ -176,7 +178,19 @@ async function startStubServer() {
 
 		if (method === "GET" && url === "/v1/document") {
 			requests.push({ method, url, apiKey, body: undefined });
-			writeJson(res, 200, [buildCanvasDocument(), buildTextDocument()]);
+			writeJson(res, 200, {
+				documents: [buildCanvasDocument(), buildTextDocument()].map((doc) => ({
+					_id: doc._id,
+					title: doc.title,
+					description: doc.description,
+					content: { _type: doc.content._type },
+					pinned: doc.isFavorite,
+					inLibrary: doc.inLibrary,
+					tags: doc.tags,
+					createdAt: doc.createdAt,
+					updatedAt: doc.updatedAt,
+				})),
+			});
 			return;
 		}
 
@@ -341,12 +355,14 @@ describe("Hermes runner integration", () => {
 		);
 		expect(createRequest?.apiKey).toBe("stub-api-key");
 		expect(
-			Array.isArray((patchRequest?.body as { operations?: unknown[] })?.operations),
+			Array.isArray(
+				(patchRequest?.body as { operations?: unknown[] })?.operations,
+			),
 		).toBe(true);
 		expect(
-			(patchRequest?.body as { operations: Array<{ _type: string }> }).operations.some(
-				(operation) => operation._type === "createEdge",
-			),
+			(
+				patchRequest?.body as { operations: Array<{ _type: string }> }
+			).operations.some((operation) => operation._type === "createEdge"),
 		).toBe(true);
 	});
 
@@ -395,7 +411,9 @@ describe("Hermes runner integration", () => {
 
 		expect(result.ok).toBe(true);
 		if (result.ok) {
-			expect(result.content[0]?.text).toContain("Document updated: **Updated note**");
+			expect(result.content[0]?.text).toContain(
+				"Document updated: **Updated note**",
+			);
 		}
 
 		const patchRequest = activeStub.requests.find(
@@ -439,7 +457,9 @@ describe("Hermes runner integration", () => {
 
 		expect(result.ok).toBe(true);
 		if (result.ok) {
-			expect(result.content[0]?.text).toContain("Saved node document to library");
+			expect(result.content[0]?.text).toContain(
+				"Saved node document to library",
+			);
 		}
 
 		const metadataRequest = activeStub.requests.find(
@@ -489,9 +509,9 @@ describe("Hermes runner integration", () => {
 		});
 		expect(typeof uploadRequest?.body).toBe("string");
 		expect(
-			(patchRequest?.body as { operations?: Array<{ _type: string }> })?.operations?.some(
-				(operation) => operation._type === "createNode",
-			),
+			(
+				patchRequest?.body as { operations?: Array<{ _type: string }> }
+			)?.operations?.some((operation) => operation._type === "createNode"),
 		).toBe(true);
 	});
 });

@@ -27,6 +27,7 @@ describe("executeListDocuments", () => {
 					generated: false,
 					inLibrary: true,
 					isFavorite: false,
+					pinned: false,
 					ownerId: "owner1",
 					tags: ["draft"],
 					createdAt: "2026-01-01T00:00:00Z",
