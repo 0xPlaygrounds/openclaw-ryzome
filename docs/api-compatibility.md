@@ -1,0 +1,83 @@
+# API compatibility and tool coverage
+
+Checked against the Ryzome backend at `a4cb8ce01bcb7a09343a63d389c1e70ee2689a45`.
+This is a source-contract audit, not a live deployment verification.
+
+## Document listing
+
+`GET /v1/document` returns `{ documents: DocumentMetadataView[] }`. Metadata includes
+`content._type`, `pinned`, `inLibrary`, and BSON timestamps; it does not include full
+text, canvas nodes, or bundle members. List filters use `tags` and `pinned`.
+The shared client normalizes timestamps and retains `isFavorite` in tool summaries.
+
+Malformed successful responses must retain their HTTP status and must not be
+retried as network failures. A local `TypeError` previously became `status=0`,
+masking the stale array response assumption.
+
+## Bundles
+
+Bundles are ordered collections of document references. Their endpoints accept API keys:
+
+- Create through `POST /v1/document` with Bundle content.
+- Read through `GET /v1/document/{id}`.
+- Add, remove, or reorder references through `PATCH /v1/bundle/{id}`.
+
+Use `create_ryzome_bundle`, `get_ryzome_bundle`, and `update_ryzome_bundle` for these
+operations. To discover bundles, call `list_ryzome_documents` with
+`content_types: ["Bundle"]`; set `in_library_only: false` to include bundles outside
+the library. Member metadata can report inaccessible or missing documents, so a
+bundle read must preserve those access states instead of assuming every member is readable.
+
+Example tool arguments (replace the example IDs with existing document IDs):
+
+```json
+{
+  "title": "Research pack",
+  "document_ids": ["0123456789abcdef01234567", "0123456789abcdef01234568"]
+}
+```
+
+To update membership, call `update_ryzome_bundle`:
+
+```json
+{
+  "bundle_id": "0123456789abcdef01234569",
+  "operations": [
+    { "_type": "addDocument", "id": "0123456789abcdef01234570", "position": 0 },
+    { "_type": "removeDocument", "id": "0123456789abcdef01234567" }
+  ]
+}
+```
+
+`reorderDocuments` takes an `ids` array containing every current member exactly
+once. Removing a reference does not delete its document. Server rules still apply
+to protected system bundles.
+
+## Other existing contract gaps
+
+The metadata update request does not accept `tags`, although the existing generic
+update tool advertises that field. Fixing tag updates needs a matching backend
+operation or a change to that tool's contract; adding a new tool would not resolve it.
+
+## Follow-up tools requiring backend authentication work
+
+The following newer features currently use session credentials rather than API-key
+authentication. Exposing tools for them would also require backend changes:
+
+| Feature | Candidate tool | Current backend route |
+| --- | --- | --- |
+| Workspace search | `search_ryzome_documents` | `GET /v1/search` |
+| Copy documents | `copy_ryzome_document` | `POST /v1/document/copy` |
+| Delete documents | `delete_ryzome_documents` | `DELETE /v1/documents` |
+| Workspace navigation and state | Workspace inspection/navigation tools | Workspace routes |
+| Conversations | Conversation and message tools | Conversation routes |
+
+Before adding a tool, check the handler's authentication extractor as well as its
+OpenAPI security declaration. Keep read, create, and patch contracts distinct:
+response views are not necessarily accepted request bodies.
+
+Source entry points in [the backend repository](https://github.com/0xPlaygrounds/ryzome):
+`packages/workspace/document-routes/src/document/get_documents.rs`,
+`packages/workspace/document-routes/src/bundle/patch_bundle.rs`,
+`packages/workspace/document-mapper/src/bundle/views.rs`, and
+`packages/workspace/search-routes/src/search.rs`.

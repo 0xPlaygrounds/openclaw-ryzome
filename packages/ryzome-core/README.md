@@ -1,6 +1,6 @@
 # @ryzome-ai/ryzome-core
 
-Shared logic for Ryzome canvas integrations: API client, 11 tools, graph builder, layout engine, and markdown formatter.
+Shared logic for Ryzome canvas integrations: API client, 14 tools, graph builder, layout engine, and markdown formatter.
 
 This package powers [`@ryzome-ai/ryzome-mcp`](../ryzome-mcp), [`@ryzome-ai/openclaw-ryzome`](../openclaw-ryzome), and the Hermes plugin in [`packages/hermes-ryzome`](../hermes-ryzome) (published to PyPI as `hermes-ryzome-plugin`).
 
@@ -36,6 +36,9 @@ The `toolRegistry` array contains 11 ready-to-register tools:
 | `update_ryzome_document` | Update a standalone Ryzome document using document operations and metadata changes |
 | `save_ryzome_node_to_library` | Promote an existing canvas node's backing document into the library |
 | `upload_ryzome_image` | Upload an image from a URL to an existing canvas as an image node |
+| `create_ryzome_bundle` | Create an ordered collection of existing documents |
+| `get_ryzome_bundle` | Retrieve a bundle and its member metadata, including access status |
+| `update_ryzome_bundle` | Add, remove, or reorder documents in a bundle |
 
 Each tool entry has `name`, `description`, `paramsSchema` (Zod), and an `execute` function.
 

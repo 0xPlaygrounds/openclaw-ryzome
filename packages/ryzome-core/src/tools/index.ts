@@ -1,3 +1,39 @@
+import {
+	createBundleToolName,
+	createBundleToolDescription,
+	createBundleParamsSchema,
+	executeCreateBundle,
+} from "./create-bundle.js";
+export {
+	createBundleToolName,
+	createBundleToolDescription,
+	createBundleParamsSchema,
+	executeCreateBundle,
+} from "./create-bundle.js";
+import {
+	getBundleToolName,
+	getBundleToolDescription,
+	getBundleParamsSchema,
+	executeGetBundle,
+} from "./get-bundle.js";
+export {
+	getBundleToolName,
+	getBundleToolDescription,
+	getBundleParamsSchema,
+	executeGetBundle,
+} from "./get-bundle.js";
+import {
+	updateBundleToolName,
+	updateBundleToolDescription,
+	updateBundleParamsSchema,
+	executeUpdateBundle,
+} from "./update-bundle.js";
+export {
+	updateBundleToolName,
+	updateBundleToolDescription,
+	updateBundleParamsSchema,
+	executeUpdateBundle,
+} from "./update-bundle.js";
 import type { ZodObject, ZodRawShape } from "zod";
 import type { RyzomeClientConfig } from "../lib/ryzome-client.js";
 
@@ -223,5 +259,23 @@ export const toolRegistry: ToolEntry[] = [
 		description: uploadImageToolDescription,
 		paramsSchema: uploadImageParamsSchema,
 		execute: executeUploadImage,
+	},
+	{
+		name: createBundleToolName,
+		description: createBundleToolDescription,
+		paramsSchema: createBundleParamsSchema,
+		execute: executeCreateBundle,
+	},
+	{
+		name: getBundleToolName,
+		description: getBundleToolDescription,
+		paramsSchema: getBundleParamsSchema,
+		execute: executeGetBundle,
+	},
+	{
+		name: updateBundleToolName,
+		description: updateBundleToolDescription,
+		paramsSchema: updateBundleParamsSchema,
+		execute: executeUpdateBundle,
 	},
 ];
