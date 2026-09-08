@@ -7,6 +7,7 @@ import { executeAddConversationMessage } from "../add-conversation-message.js";
 import { executeSearchConversations } from "../search-conversations.js";
 import { executeDeleteConversation } from "../delete-conversation.js";
 import { RyzomeClient } from "../../lib/ryzome-client.js";
+import { retryStage } from "../../lib/retry.js";
 
 const id = "0123456789abcdef01234567";
 const contextId = "1123456789abcdef01234567";
@@ -141,6 +142,13 @@ describe("conversation tools and API contracts", () => {
 		});
 		expect(result.content[0].text).toContain("# Project sync");
 	});
+	it("rejects empty updates before making a request", async () => {
+		const fetch = mockFetch();
+		await expect(
+			executeUpdateConversation({ conversation_id: id }, config),
+		).rejects.toThrow("No conversation updates provided.");
+		expect(fetch).not.toHaveBeenCalled();
+	});
 	it("appends a user message and returns the updated conversation", async () => {
 		const fetch = mockFetch(
 			response({ message: conversation.messages[0] }),
@@ -214,6 +222,38 @@ describe("conversation tools and API contracts", () => {
 			retryable: false,
 			stage: "listConversations",
 		});
+	});
+	it("does not retry schema-invalid conversation creates after a successful POST", async () => {
+		const fetch = mockFetch(response({ committed: true }, 201));
+		await expect(
+			retryStage(() =>
+				new RyzomeClient(config).createConversation({ title: "Project sync" }),
+			),
+		).rejects.toMatchObject({
+			status: 201,
+			retryable: false,
+			stage: "createConversation",
+		});
+		expect(fetch).toHaveBeenCalledOnce();
+	});
+	it("does not retry schema-invalid message appends after a successful POST", async () => {
+		const fetch = mockFetch(response({ committed: true }, 201));
+		await expect(
+			retryStage(() =>
+				new RyzomeClient(config).addConversationMessage(id, {
+					content: {
+						_type: "user",
+						content: [{ _type: "text", text: "Follow-up" }],
+					},
+				}),
+			),
+		).rejects.toMatchObject({
+			status: 201,
+			retryable: false,
+			stage: "addConversationMessage",
+			conversationId: id,
+		});
+		expect(fetch).toHaveBeenCalledOnce();
 	});
 	it("normalizes BSON timestamps in conversation summaries", async () => {
 		mockFetch(response([conversation]));

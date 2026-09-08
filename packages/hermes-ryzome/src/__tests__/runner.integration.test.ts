@@ -16,6 +16,7 @@ type StubRequest = {
 
 const CANVAS_ID = "507f1f77bcf86cd799439011";
 const DOCUMENT_ID = "507f1f77bcf86cd799439012";
+const CONVERSATION_ID = "507f1f77bcf86cd799439099";
 const LIBRARY_DOCUMENT_ID = "507f1f77bcf86cd799439013";
 const NODE_ID = "507f1f77bcf86cd799439014";
 const NOW = "2026-04-15T00:00:00.000Z";
@@ -237,6 +238,12 @@ async function startStubServer() {
 			const body = await readJsonBody(req);
 			requests.push({ method, url, apiKey, body });
 			writeJson(res, 200, {});
+			return;
+		}
+
+		if (method === "GET" && url === `/v1/conversation/${CONVERSATION_ID}`) {
+			requests.push({ method, url, apiKey, body: undefined });
+			writeJson(res, 503, { error: "conversation unavailable" });
 			return;
 		}
 
@@ -468,6 +475,30 @@ describe("Hermes runner integration", () => {
 				request.url === `/v1/document/${LIBRARY_DOCUMENT_ID}/metadata`,
 		);
 		expect(metadataRequest?.body).toMatchObject({ inLibrary: true });
+	});
+
+	it("preserves conversationId on serialized conversation failures", async () => {
+		activeStub = await startStubServer();
+
+		const result = await runTool({
+			toolName: "get_ryzome_conversation",
+			params: { conversation_id: CONVERSATION_ID },
+			config: {
+				apiKey: "stub-api-key",
+				apiUrl: activeStub.apiUrl,
+				appUrl: activeStub.appUrl,
+			},
+		});
+
+		expect(result.ok).toBe(false);
+		if (!result.ok) {
+			expect(result.error).toMatchObject({
+				name: "RyzomeApiError",
+				status: 503,
+				retryable: true,
+				conversationId: CONVERSATION_ID,
+			});
+		}
 	});
 
 	it("uploads an image and patches the target canvas", async () => {

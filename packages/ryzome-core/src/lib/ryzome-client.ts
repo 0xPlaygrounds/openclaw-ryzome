@@ -568,6 +568,7 @@ export class RyzomeClient {
 	}
 
 	async createConversation(req: CreateConversationRequest): Promise<string> {
+		let httpResponse: Response | undefined;
 		try {
 			const { data, error, response } = await this.client.POST(
 				"/conversation",
@@ -576,6 +577,7 @@ export class RyzomeClient {
 				},
 			);
 
+			httpResponse = response;
 			if (!response.ok || !data) {
 				throw this.buildHttpError({
 					stage: "createConversation",
@@ -589,6 +591,17 @@ export class RyzomeClient {
 			return createConversationResponseSchema.parse(data).conversation_id;
 		} catch (error) {
 			if (error instanceof RyzomeApiError) throw error;
+			if (httpResponse) {
+				throw new RyzomeApiError({
+					stage: "createConversation",
+					method: "POST",
+					path: "/conversation",
+					status: httpResponse.status,
+					body: stringifyErrorBody(error),
+					retryable: false,
+					cause: error,
+				});
+			}
 			throw this.buildNetworkError({
 				stage: "createConversation",
 				method: "POST",
@@ -788,6 +801,7 @@ export class RyzomeClient {
 	): Promise<MessageView> {
 		const path = `/conversation/${conversationId}/messages`;
 
+		let httpResponse: Response | undefined;
 		try {
 			const { data, error, response } = await this.client.POST(
 				"/conversation/{conversation_id}/messages",
@@ -797,6 +811,7 @@ export class RyzomeClient {
 				},
 			);
 
+			httpResponse = response;
 			if (!response.ok || !data) {
 				throw this.buildHttpError({
 					stage: "addConversationMessage",
@@ -811,6 +826,18 @@ export class RyzomeClient {
 			return addMessageResponseSchema.parse(data).message;
 		} catch (error) {
 			if (error instanceof RyzomeApiError) throw error;
+			if (httpResponse) {
+				throw new RyzomeApiError({
+					stage: "addConversationMessage",
+					method: "POST",
+					path,
+					status: httpResponse.status,
+					body: stringifyErrorBody(error),
+					retryable: false,
+					cause: error,
+					conversationId,
+				});
+			}
 			throw this.buildNetworkError({
 				stage: "addConversationMessage",
 				method: "POST",

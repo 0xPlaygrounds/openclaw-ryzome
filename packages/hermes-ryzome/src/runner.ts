@@ -35,6 +35,7 @@ export interface RunnerFailure {
 		body?: string;
 		canvasId?: string;
 		documentId?: string;
+		conversationId?: string;
 	};
 }
 
@@ -65,6 +66,7 @@ function serializeError(error: unknown, toolName?: string): RunnerFailure {
 				body: error.body,
 				canvasId: error.canvasId,
 				documentId: error.documentId,
+				conversationId: error.conversationId,
 			},
 		};
 	}

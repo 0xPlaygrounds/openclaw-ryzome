@@ -23,6 +23,14 @@ export async function executeUpdateConversation(
 	clientConfig: RyzomeClientConfig,
 ) {
 	const params = updateConversationParamsSchema.parse(rawParams);
+	if (
+		params.title === undefined &&
+		params.pinned === undefined &&
+		params.context === undefined &&
+		params.removed_context === undefined
+	) {
+		throw new Error("No conversation updates provided.");
+	}
 	const client = new RyzomeClient(clientConfig);
 	await client.patchConversation(params.conversation_id, {
 		title: params.title,
